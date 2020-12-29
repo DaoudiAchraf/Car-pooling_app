@@ -13,14 +13,18 @@ import { Button, Icon, Input } from "../components";
 import { Images, argonTheme } from "../constants";
 import { Formik } from 'formik';
 import auth from '../MyApi/Auth';
+import jwtDecode from 'jwt-decode';
 
 const { width, height } = Dimensions.get("screen");
 
-const Register =()=> {
+const Login =({navigation})=> {
 
-  const Submit = ({name,email,password})=>
+  const Submit = ({email,password})=>
   {
-    auth.register(name,email,password).then(res=>console.log("==>",res));
+    auth.login(email,password).then(res=>{
+        const user = jwtDecode(res.data.token);
+        console.log("==>",user);
+    });
   }
 
     return (
@@ -51,7 +55,7 @@ const Register =()=> {
               <Block flex>
                 <Block flex={0.17} middle>
                   <Text color="#8898AA" size={15}>
-                    Register
+                    Enter your Login information
                   </Text>
                 </Block>
                 <Block flex center>
@@ -60,23 +64,7 @@ const Register =()=> {
                     behavior="padding"
                     enabled
                   >
-                    <Block width={width * 0.8} style={{ marginBottom: 15 }}>
-                      <Input
-                        onChangeText={handleChange('name')}
-                        
-                        borderless
-                        placeholder="Name"
-                        iconContent={
-                          <Icon
-                            size={16}
-                            color={argonTheme.COLORS.ICON}
-                            name="hat-3"
-                            family="ArgonExtra"
-                            style={styles.inputIcons}
-                          />
-                        }
-                      />
-                    </Block>
+                  
                     <Block width={width * 0.8} style={{ marginBottom: 15 }}>
                       <Input
                       onChangeText={handleChange('email')}
@@ -109,40 +97,14 @@ const Register =()=> {
                           />
                         }
                       />
-                      {/* <Block row style={styles.passwordCheck}>
-                        <Text size={12} color={argonTheme.COLORS.MUTED}>
-                          password strength:
-                        </Text>
-                        <Text bold size={12} color={argonTheme.COLORS.SUCCESS}>
-                          {" "}
-                          strong
-                        </Text>
-                      </Block> */}
+             
                     </Block>
-                    {/* <Block row width={width * 0.75}>
-                      <Checkbox
-                        checkboxStyle={{
-                          borderWidth: 3
-                        }}
-                        color={argonTheme.COLORS.PRIMARY}
-                        label="I agree with the"
-                      />
-                      <Button
-                        style={{ width: 100 }}
-                        color="transparent"
-                        textStyle={{
-                          color: argonTheme.COLORS.PRIMARY,
-                          fontSize: 14
-                        }}
-                      >
-                        Privacy Policy
-                      </Button>
-                    </Block> */}
+                 
                     <Block middle>
                       <Button onPress={handleSubmit}
                        color="primary" style={styles.createButton}>
                         <Text bold size={14} color={argonTheme.COLORS.WHITE}>
-                          CREATE ACCOUNT
+                          Sign In
                         </Text>
                       </Button>
                     </Block>
@@ -162,7 +124,7 @@ const Register =()=> {
 const styles = StyleSheet.create({
   registerContainer: {
     width: width * 0.9,
-    height: height * 0.57,
+    height: height * 0.45,
     backgroundColor: "#F4F5F7",
     borderRadius: 4,
     shadowColor: argonTheme.COLORS.BLACK,
@@ -214,4 +176,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default Register;
+export default Login;

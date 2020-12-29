@@ -4,9 +4,12 @@ import {
   Image,
   StyleSheet,
   StatusBar,
-  Dimensions
+  Dimensions,
+  View
 } from "react-native";
 import { Block, Button, Text, theme } from "galio-framework";
+
+import { FontAwesome5 } from '@expo/vector-icons'; 
 
 const { height, width } = Dimensions.get("screen");
 
@@ -26,36 +29,30 @@ class Onboarding extends React.Component {
             style={{ height, width, zIndex: 1 }}
           />
         </Block>
-        <Block center>
-          <Image source={Images.LogoOnboarding} style={styles.logo} />
-        </Block>
+        <View style={styles.logo}>
+        <FontAwesome5 name="car-alt" size={150} color="white" />
+         
+          <Text bold size={28} color="white">Covoiturage</Text>
+        </View>
         <Block flex space="between" style={styles.padded}>
             <Block flex space="around" style={{ zIndex: 2 }}>
-              <Block style={styles.title}>
-                <Block>
-                  <Text color="white" size={60}>
-                    Design
-                  </Text>
-                </Block>
-                <Block>
-                  <Text color="white" size={60}>
-                    System
-                  </Text>
-                </Block>
-                <Block style={styles.subTitle}>
-                  <Text color="white" size={16}>
-                    Fully coded React Native components.
-                  </Text>
-                </Block>
-              </Block>
+            
               <Block center>
                 <Button
                   style={styles.button}
-                  color={argonTheme.COLORS.SECONDARY}
-                  onPress={() => navigation.navigate("App")}
-                  textStyle={{ color: argonTheme.COLORS.BLACK }}
+                  color={argonTheme.COLORS.PRICE_COLOR}
+                  onPress={() => navigation.navigate("Login")}
+                  textStyle={{ color: argonTheme.COLORS.BLACK, }}
                 >
-                  Get Started
+                  Sign In
+                </Button>
+                <Button
+                  style={styles.button}
+                  color={argonTheme.COLORS.BUTTON_COLOR}
+                  onPress={() => navigation.navigate("Register")}
+                  textStyle={{ color: argonTheme.COLORS.WHITE }}
+                >
+                  Sign Up
                 </Button>
               </Block>
           </Block>
@@ -79,14 +76,18 @@ const styles = StyleSheet.create({
     width: width - theme.SIZES.BASE * 4,
     height: theme.SIZES.BASE * 3,
     shadowRadius: 0,
-    shadowOpacity: 0
+    shadowOpacity: 0,
+  
   },
   logo: {
-    width: 200,
+    width: "100%",
     height: 60,
     zIndex: 2,
     position: 'relative',
-    marginTop: '-50%'
+    marginTop: '-50%',
+    alignItems:"center",
+    justifyContent:"center",
+
   },
   title: {
     marginTop:'-5%'

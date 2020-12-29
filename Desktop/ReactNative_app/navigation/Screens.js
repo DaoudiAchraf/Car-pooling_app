@@ -21,6 +21,7 @@ import CustomDrawerContent from "./Menu";
 // header for screens
 import { Icon, Header } from "../components";
 import { argonTheme, tabs } from "../constants";
+import Login from "../screens/Login";
 
 const { width } = Dimensions.get("screen");
 
@@ -176,6 +177,21 @@ function HomeStack(props) {
     </Stack.Navigator>
   );
 }
+function RegisterStack(props) {
+  return (
+    <Stack.Navigator mode="card" headerMode="none">
+      <Stack.Screen
+        name="Onboarding"
+        component={Onboarding}
+        option={{
+          headerTransparent: true
+        }}
+      />
+      {/* <Stack.Screen name="Register" component={Register} />
+      <Stack.Screen name="Login" component={Login} /> */}
+    </Stack.Navigator>
+  );
+}
 
 export default function OnboardingStack(props) {
   return (
@@ -187,7 +203,10 @@ export default function OnboardingStack(props) {
           headerTransparent: true
         }}
       />
-      <Stack.Screen name="App" component={AppStack} />
+      <Stack.Screen name="Login" component={Login} />
+      <Stack.Screen name="Register" component={RegisterStack} />
+
+      {/* <Stack.Screen name="Login" component={AppStack} /> */}
     </Stack.Navigator>
   );
 }

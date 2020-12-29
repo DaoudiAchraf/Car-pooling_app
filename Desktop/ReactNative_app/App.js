@@ -12,6 +12,7 @@ enableScreens();
 
 import Screens from "./navigation/Screens";
 import { Images, articles, argonTheme } from "./constants";
+import Register from "./screens/Register";
 
 // cache app images
 const assetImages = [
@@ -70,7 +71,7 @@ export default props => {
       <NavigationContainer>
         <GalioProvider theme={argonTheme}>
           <Block flex>
-            <Screens />
+           <Screens/>
           </Block>
         </GalioProvider>
       </NavigationContainer>
