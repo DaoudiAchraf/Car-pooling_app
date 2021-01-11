@@ -15,6 +15,7 @@ import Profile from "../screens/Profile";
 import Register from "../screens/Register";
 import Elements from "../screens/Elements";
 import Articles from "../screens/Articles";
+import Event from "../screens/Event";
 // drawer
 import CustomDrawerContent from "./Menu";
 
@@ -177,6 +178,48 @@ function HomeStack(props) {
     </Stack.Navigator>
   );
 }
+
+//------------------------------
+function EventStack(props) {
+  return (
+    <Stack.Navigator mode="card" headerMode="screen">
+      <Stack.Screen
+        name="Home"
+        component={Event}
+        options={{
+          header: ({ navigation, scene }) => (
+            <Header
+              title="Home"
+              search
+              options
+              navigation={navigation}
+              scene={scene}
+            />
+          ),
+          cardStyle: { backgroundColor: "#F8F9FE" }
+        }}
+      />
+      <Stack.Screen
+        name="Pro"
+        component={Pro}
+        options={{
+          header: ({ navigation, scene }) => (
+            <Header
+              title=""
+              back
+              white
+              transparent
+              navigation={navigation}
+              scene={scene}
+            />
+          ),
+          headerTransparent: true
+        }}
+      />
+    </Stack.Navigator>
+  );
+}
+//------------------------------
 function RegisterStack(props) {
   return (
     <Stack.Navigator mode="card" headerMode="none">
@@ -203,13 +246,32 @@ export default function OnboardingStack(props) {
           headerTransparent: true
         }}
       />
-      <Stack.Screen name="Login" component={Login} />
+      <Stack.Screen name="Login" component={LoginStack} />
       <Stack.Screen name="Register" component={Register} />
-
+      {/* <Stack.Screen name="profile" component={Profile} /> */}
       {/* <Stack.Screen name="Login" component={AppStack} /> */}
     </Stack.Navigator>
   );
 }
+
+export function LoginStack(props) {
+  return (
+    <Stack.Navigator mode="card" headerMode="none">
+      <Stack.Screen
+        name="Login"
+        component={Login}
+        option={{
+          headerTransparent: true
+        }}
+      />
+      {/* <Stack.Screen name="profile" component={Profile} /> */}
+      <Stack.Screen name="profile" component={AppStack} />
+      <Stack.Screen name="Home" component={HomeStack} />
+      
+    </Stack.Navigator>
+  );
+}
+
 
 function AppStack(props) {
   return (
@@ -245,7 +307,7 @@ function AppStack(props) {
       <Drawer.Screen name="Home" component={HomeStack} />
       <Drawer.Screen name="Profile" component={ProfileStack} />
       <Drawer.Screen name="Account" component={Register} />
-      <Drawer.Screen name="Elements" component={ElementsStack} />
+      <Drawer.Screen name="Elements" component={EventStack} />
       <Drawer.Screen name="Articles" component={ArticlesStack} />
     </Drawer.Navigator>
   );

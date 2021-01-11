@@ -4,6 +4,7 @@ import { Block, theme } from 'galio-framework';
 
 import { Card } from '../components';
 import articles from '../constants/articles';
+
 const { width } = Dimensions.get('screen');
 
 class Home extends React.Component {
@@ -14,7 +15,7 @@ class Home extends React.Component {
         contentContainerStyle={styles.articles}>
         <Block flex>
           <Card item={articles[0]} horizontal  />
-          <Block flex row>
+          <Block flex >
             <Card item={articles[1]} style={{ marginRight: theme.SIZES.BASE }} />
             <Card item={articles[2]} />
           </Block>

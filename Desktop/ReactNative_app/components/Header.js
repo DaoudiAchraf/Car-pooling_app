@@ -61,11 +61,11 @@ class Header extends React.Component {
     }
 
     switch (title) {
-      case 'Home':
-        return ([
-          <BellButton key='chat-home' navigation={navigation} isWhite={white} />,
-          <BasketButton key='basket-home' navigation={navigation} isWhite={white} />
-        ]);
+      // case 'Home':
+      //   return ([
+      //     <BellButton key='chat-home' navigation={navigation} isWhite={white} />,
+      //     <BasketButton key='basket-home' navigation={navigation} isWhite={white} />
+      //   ]);
       case 'Deals':
         return ([
           <BellButton key='chat-categories' navigation={navigation} />,
@@ -157,9 +157,9 @@ class Header extends React.Component {
     if (search || tabs || options) {
       return (
         <Block center>
-          {search ? this.renderSearch() : null}
-          {options ? this.renderOptions() : null}
-          {tabs ? this.renderTabs() : null}
+          {/* {search ? this.renderSearch() : null} */}
+          {/* {options ? this.renderOptions() : null} */}
+          {/* {tabs ? this.renderTabs() : null} */}
         </Block>
       );
     }

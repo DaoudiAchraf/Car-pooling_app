@@ -5,6 +5,7 @@ import { useFonts } from '@use-expo/font';
 import { Asset } from "expo-asset";
 import { Block, GalioProvider } from "galio-framework";
 import { NavigationContainer } from "@react-navigation/native";
+import Map from './components/Map';
 
 // Before rendering any navigation stack
 import { enableScreens } from "react-native-screens";
@@ -13,6 +14,8 @@ enableScreens();
 import Screens from "./navigation/Screens";
 import { Images, articles, argonTheme } from "./constants";
 import Register from "./screens/Register";
+import AuthContext from "./Context/Context";
+import Event from "./screens/Event";
 
 // cache app images
 const assetImages = [
@@ -58,6 +61,8 @@ export default props => {
     setLoading(true);
   };
 
+  const [user,setUser] = useState();
+
   if(!fontsLoaded && !isLoadingComplete) {
     return (
       <AppLoading
@@ -68,13 +73,17 @@ export default props => {
     );
   } else if(fontsLoaded) {
     return (
-      <NavigationContainer>
-        <GalioProvider theme={argonTheme}>
-          <Block flex>
-           <Screens/>
-          </Block>
-        </GalioProvider>
-      </NavigationContainer>
+      <AuthContext.Provider value={{user,setUser}}>
+          <NavigationContainer>
+            <GalioProvider theme={argonTheme}>
+              <Block flex>
+                  <Screens/>
+              {/* <Event/> */}
+              {/* <Map/>  */}
+              </Block>
+            </GalioProvider>
+          </NavigationContainer>
+      </AuthContext.Provider>
     );
   } else {
     return null

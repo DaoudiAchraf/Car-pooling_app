@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native';
 import PropTypes from 'prop-types';
 import ModalDropdown from 'react-native-modal-dropdown';
 import { Block, Text } from 'galio-framework';
-
+import { MaterialCommunityIcons} from '@expo/vector-icons';
 import Icon from './Icon';
 import { argonTheme } from '../constants';
 
@@ -42,6 +42,7 @@ class DropDown extends React.Component {
         {...props}>
         <Block flex row middle space="between">
           <Text size={12} style={textStyles}>{this.state.value}</Text>
+          <MaterialCommunityIcons name="car-seat" size={16.2} color="white" />
           <Icon name={iconName || "nav-down"} family={iconFamily || "ArgonExtra"} size={iconSize || 10} color={iconColor || argonTheme.COLORS.WHITE} />
         </Block>
       </ModalDropdown>

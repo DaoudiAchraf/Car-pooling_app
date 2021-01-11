@@ -1,4 +1,4 @@
-import React from "react";
+import React,{ useContext} from "react";
 import {
   StyleSheet,
   ImageBackground,
@@ -14,16 +14,26 @@ import { Images, argonTheme } from "../constants";
 import { Formik } from 'formik';
 import auth from '../MyApi/Auth';
 import jwtDecode from 'jwt-decode';
+import AuthContext from "../Context/Context";
 
 const { width, height } = Dimensions.get("screen");
 
 const Login =({navigation})=> {
 
+  const authContext = useContext(AuthContext);
+
   const Submit = ({email,password})=>
   {
     auth.login(email,password).then(res=>{
-        const user = jwtDecode(res.data.token);
-        console.log("==>",user);
+        // const user = jwtDecode(res.data.token);
+        // console.log("==>",user);
+        
+        // authContext.setUser(user);
+
+        // console.log(authContext.user);
+     
+        navigation.navigate("Home");
+
     });
   }
 
@@ -124,7 +134,7 @@ const Login =({navigation})=> {
 const styles = StyleSheet.create({
   registerContainer: {
     width: width * 0.9,
-    height: height * 0.45,
+    height: height * 0.6,
     backgroundColor: "#F4F5F7",
     borderRadius: 4,
     shadowColor: argonTheme.COLORS.BLACK,
