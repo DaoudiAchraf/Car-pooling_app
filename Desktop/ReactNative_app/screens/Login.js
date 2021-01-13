@@ -15,26 +15,50 @@ import { Formik } from 'formik';
 import auth from '../MyApi/Auth';
 import jwtDecode from 'jwt-decode';
 import AuthContext from "../Context/Context";
+import { Snackbar } from 'react-native-paper';
 
 const { width, height } = Dimensions.get("screen");
 
 const Login =({navigation})=> {
 
+  const [visible, setVisible] = React.useState(false);
+
+  const [ErrorMSG, setErrorMSG] = React.useState("Enter Votre email et mot de passe");
+
+  const onToggleSnackBar = () => setVisible(!visible);
+
+  const onDismissSnackBar = () => setVisible(false);
+
   const authContext = useContext(AuthContext);
 
   const Submit = ({email,password})=>
   {
-    auth.login(email,password).then(res=>{
-        // const user = jwtDecode(res.data.token);
-        // console.log("==>",user);
+    navigation.navigate("profile");
+    // if(email === '' && password === '' )
+    //     onToggleSnackBar(true);
+    // else if (email === '' )
+    // {
+    //   setErrorMSG("Entrer Votre email");
+    //   onToggleSnackBar(true);
+      
+    // }
+    // else if( password === '')
+    // { 
+    //   setErrorMSG("Enter votre mot de passe");
+    //   onToggleSnackBar(true);
+    // }
+    // else auth.login(email,password).then(res=>{
+    //     // const user = jwtDecode(res.data.token);
+    //     // console.log("==>",user);
         
-        // authContext.setUser(user);
+    //     // authContext.setUser(user);
 
-        // console.log(authContext.user);
+    //     // console.log(authContext.user);
      
-        navigation.navigate("Home");
+    //     // navigation.navigate("profile");
+       
 
-    });
+    // });
   }
 
     return (
@@ -44,6 +68,17 @@ const Login =({navigation})=> {
     >
       {({ handleChange,handleSubmit}) => (
       <>
+          <Snackbar duration={7000} style={{position: 'absolute',bottom:0}}
+          visible={visible}
+          onDismiss={onDismissSnackBar}
+          action={{
+            label: 'Undo',
+            onPress: () => {
+              // Do something
+            },
+          }}>
+          {ErrorMSG}
+      </Snackbar>
       <Block flex middle>
         <StatusBar hidden />
         <ImageBackground
@@ -93,7 +128,7 @@ const Login =({navigation})=> {
                     </Block>
                     <Block width={width * 0.8}>
                       <Input
-                         onChangeText={handleChange('password')}
+                        onChangeText={handleChange('password')}
                         password
                         borderless
                         placeholder="Password"
@@ -123,10 +158,14 @@ const Login =({navigation})=> {
               </Block>
             </Block>
           </Block>
+            
         </ImageBackground>
       </Block>
-      </>)}
+      </>)}    
       </Formik>
+
+
+
     );
   
 }
@@ -173,7 +212,9 @@ const styles = StyleSheet.create({
     fontSize: 24
   },
   inputIcons: {
-    marginRight: 12
+    marginRight: 12,
+   
+
   },
   passwordCheck: {
     paddingLeft: 15,

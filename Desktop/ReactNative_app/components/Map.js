@@ -10,7 +10,10 @@ import MapViewDirections from 'react-native-maps-directions';
 const origin = {latitude: 37.3318456, longitude: -122.0296002};
 const destination = {latitude: 37.771707, longitude: -122.4053769};
 
-export default function App() {
+export default function App({navigation,route}) {
+
+    const { covoiturageInfo } = route.params;
+    console.log(covoiturageInfo);
 
     const [depart , setDepart] = useState(true);
     const [btnDisabled,setBtnDisabled] = useState(true);

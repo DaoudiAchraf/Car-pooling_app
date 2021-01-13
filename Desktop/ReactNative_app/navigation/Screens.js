@@ -16,6 +16,7 @@ import Register from "../screens/Register";
 import Elements from "../screens/Elements";
 import Articles from "../screens/Articles";
 import Event from "../screens/Event";
+import Map from "../components/Map";
 // drawer
 import CustomDrawerContent from "./Menu";
 
@@ -184,12 +185,12 @@ function EventStack(props) {
   return (
     <Stack.Navigator mode="card" headerMode="screen">
       <Stack.Screen
-        name="Home"
+        name="Event"
         component={Event}
         options={{
           header: ({ navigation, scene }) => (
             <Header
-              title="Home"
+              title="Event"
               search
               options
               navigation={navigation}
@@ -199,23 +200,8 @@ function EventStack(props) {
           cardStyle: { backgroundColor: "#F8F9FE" }
         }}
       />
-      <Stack.Screen
-        name="Pro"
-        component={Pro}
-        options={{
-          header: ({ navigation, scene }) => (
-            <Header
-              title=""
-              back
-              white
-              transparent
-              navigation={navigation}
-              scene={scene}
-            />
-          ),
-          headerTransparent: true
-        }}
-      />
+      
+      <Stack.Screen name="Map" component={Map} />
     </Stack.Navigator>
   );
 }

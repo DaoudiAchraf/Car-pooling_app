@@ -13,9 +13,10 @@ import { Formik } from 'formik';
 
 //const { width } = Dimensions.get("screen");
 
+
 const { width, height } = Dimensions.get('window')
 
-  const Elements = () => {
+  const Elements = ({navigation}) => {
    
     const [AbsColor,setAbsColor] = React.useState('black');
     const [temp,setTemp] = React.useState('black');
@@ -25,10 +26,26 @@ const { width, height } = Dimensions.get('window')
 
     var option ;
 
-    const Submit = ({depart,arrive})=>
-     console.log(date);
+    const [ErrorMSG, setErrorMSG] = React.useState("Veillez remplir tout les champs")
+   
+    const Submit = ({phone,depart,arrive})=>
+    {
+      //console.log(date);
 
-     const [date, setDate] = useState(new Date(1598051730000));
+     
+
+      const formData = {
+        phone,
+        depart,
+        arrive,
+        option,
+        date
+      }
+      navigation.navigate("Map",{covoiturageInfo:formData });
+    }
+     
+
+     const [date, setDate] = useState(new Date());
      const [mode, setMode] = useState('date');
      const [show, setShow] = useState(false);
    
@@ -75,7 +92,7 @@ const { width, height } = Dimensions.get('window')
            </View>
      
         <Formik
-      initialValues={{ depart:'',arrive: ''}}
+      initialValues={{ phone:'',depart:'',arrive: ''}}
       onSubmit={Submit}
     >
        {({ handleChange,handleSubmit}) => (
@@ -87,7 +104,7 @@ const { width, height } = Dimensions.get('window')
             numberOfLines={50}
             theme={{ colors: { color:"white",background: 'white'  } }}
             label="Numero de Telephone" 
-
+            onChangeText={handleChange('phone')}
            />
 
          <TextInput style={styles.inputStyle}

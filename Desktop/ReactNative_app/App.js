@@ -1,11 +1,12 @@
 import React, {useState} from "react";
-import { Image } from "react-native";
+import { Image, LogBox } from "react-native";
 import { AppLoading } from "expo";
 import { useFonts } from '@use-expo/font';
 import { Asset } from "expo-asset";
 import { Block, GalioProvider } from "galio-framework";
 import { NavigationContainer } from "@react-navigation/native";
 import Map from './components/Map';
+
 
 // Before rendering any navigation stack
 import { enableScreens } from "react-native-screens";
@@ -40,8 +41,13 @@ function cacheImages(images) {
     }
   });
 }
+LogBox.ignoreLogs([
+  'Non-serializable values were found in the navigation state',
+]);
 
 export default props => {
+  
+  
   const [isLoadingComplete, setLoading] = useState(false);
   let [fontsLoaded] = useFonts({
     'ArgonExtra': require('./assets/font/argon.ttf'),

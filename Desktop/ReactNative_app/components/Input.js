@@ -16,7 +16,8 @@ class ArInput extends React.Component {
       !shadowless && styles.shadow,
       success && styles.success,
       error && styles.error,
-      {...this.props.style}
+      {...this.props.style},
+      
     ];
 
     return (
