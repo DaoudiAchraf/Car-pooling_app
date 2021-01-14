@@ -4,6 +4,7 @@ import { Block, Text, theme } from "galio-framework";
 
 import Icon from "./Icon";
 import argonTheme from "../constants/Theme";
+import { AntDesign,FontAwesome5,FontAwesome,Entypo,MaterialCommunityIcons } from '@expo/vector-icons';
 
 class DrawerItem extends React.Component {
   renderIcon = () => {
@@ -62,8 +63,8 @@ class DrawerItem extends React.Component {
           size={14}
           color={focused ? "white" : "rgba(0,0,0,0.5)"}
         />);
-      case "Log out":
-        return <Icon />;
+      case "Logout":
+        return <AntDesign name="logout" size={24} color="orange" />;
       default:
         return null;
     }

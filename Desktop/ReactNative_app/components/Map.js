@@ -1,9 +1,10 @@
-import React ,{useState,useEffect}from 'react';
+import React ,{useState,useEffect,useContext}from 'react';
 import MapView,{Polygon, Polyline} from 'react-native-maps';
 import { StyleSheet, Text, View, Dimensions,PermissionsAndroid, Image } from 'react-native';
 import { Button,Surface,Avatar} from 'react-native-paper';
 import { AntDesign,FontAwesome5,FontAwesome,Entypo,MaterialCommunityIcons } from '@expo/vector-icons';
 import Images from "../constants/Images";
+
 import EventService  from '../MyApi/Events';
 
 
@@ -12,7 +13,9 @@ const destination = {latitude: 37.771707, longitude: -122.4053769};
 
 export default function App({navigation,route}) {
 
+  
     const { covoiturageInfo } = route.params;
+
     console.log(covoiturageInfo);
 
     const [depart , setDepart] = useState(true);
@@ -29,7 +32,7 @@ export default function App({navigation,route}) {
 
     const addEvent = ()=>
     {
-      EventService.AddEvent({
+      const event = {
         ...covoiturageInfo,
         depart:{
           name:covoiturageInfo.depart,
@@ -38,9 +41,12 @@ export default function App({navigation,route}) {
         arrive:{
           name:covoiturageInfo.arrive,
           ...state.arriveMarker[0],
-        } 
-      }).then(()=>console.log('skrjiya'))
-      console.log("state::::::",state)
+        },
+
+      }
+
+       EventService.AddEvent(event).then(()=>console.log('skrjiya'))
+      //console.log("state::::::",state)
     
     }
 
@@ -75,13 +81,13 @@ export default function App({navigation,route}) {
           if(depart)
            {
              setState({...state, departMarker: [{ latlng: e.nativeEvent.coordinate}] })
-             console.log('depart',depart);
+             //console.log('depart',depart);
            }
             
           else
           {
             setState({...state, arriveMarker: [{ latlng: e.nativeEvent.coordinate}] })
-            console.log('depart',depart);
+            //console.log('depart',depart);
           }
      
           setBtnDisabled(false);

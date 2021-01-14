@@ -5,7 +5,8 @@ const Schema = mongoose.Schema
 const eventSchema = new Schema({
   user:
   {
-    type:String
+    type: Schema.Types.ObjectId,
+    ref: 'User'
   },
   date: {
     type: Date
@@ -29,6 +30,9 @@ const eventSchema = new Schema({
       longitude: {type: Number},
       latitude: {type: Number}
     }
+  },
+  prix: {
+    type: Number
   }
 })
 

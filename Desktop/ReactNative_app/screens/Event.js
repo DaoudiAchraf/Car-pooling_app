@@ -1,4 +1,4 @@
-import React,{useState} from "react";
+import React,{useState,useContext} from "react";
 import { ScrollView, StyleSheet, Dimensions,View,Platform, ImageBackground} from "react-native";
 // Galio components
 import { Block, Text, theme } from "galio-framework";
@@ -8,6 +8,7 @@ import { Button as Btn, Select, Icon, Input, Header, } from "../components/";
 import { TextInput,Chip,Snackbar,Button } from 'react-native-paper';
 import { MaterialCommunityIcons,MaterialIcons,FontAwesome5,Octicons} from '@expo/vector-icons';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import AuthContext from "../Context/Context";
 
 import { Formik } from 'formik';
 
@@ -27,16 +28,20 @@ const { width, height } = Dimensions.get('window')
     var option = 0 ;
 
     const [ErrorMSG, setErrorMSG] = React.useState("Veillez remplir tout les champs")
+
+    const { user } =useContext(AuthContext)
    
-    const Submit = ({phone,depart,arrive})=>
+    const Submit = ({phone,depart,arrive,prix})=>
     {
     
      const formData = {
         phone,
         depart,
         arrive,
+        prix,
         places:++option,
-        date
+        date,
+        user: user.userId
       }
       navigation.navigate("Map",{covoiturageInfo:formData });
     }
@@ -76,20 +81,20 @@ const { width, height } = Dimensions.get('window')
       style={{ height: height,width: width, position: 'absolute', resizeMode: 'cover' }} 
       source={require("../assets/splash.png")}/>
 
-        <View style={{alignItems:"center",marginBottom:20}}>
+        <View style={{alignItems:"center",marginBottom:0}}>
              
-        <FontAwesome5 name="car" size={100} color="white" />
+        <FontAwesome5 name="car" size={90} color="white" />
              <Text
                 h5
                 color={"white"}
               >
-              Organisez votre couvoiturage
+              Organisez votre covoiturage
             </Text>
           
            </View>
      
         <Formik
-      initialValues={{ phone:'',depart:'',arrive: ''}}
+      initialValues={{ phone:'',depart:'',arrive: '',prix:''}}
       onSubmit={Submit}
     >
        {({ handleChange,handleSubmit}) => (
@@ -102,21 +107,36 @@ const { width, height } = Dimensions.get('window')
             theme={{ colors: { color:"white",background: 'white'  } }}
             label="Numero de Telephone" 
             onChangeText={handleChange('phone')}
+            keyboardType="numeric"
+            style={{height:47}}
            />
 
-         <TextInput style={styles.inputStyle}
+         <TextInput
           dense={true}
           underlineColor="#FFFFFF"
           numberOfLines={50}
           theme={{ colors: { underlineColor: '#FFFFFF', background: 'white'  } }}
-          label="Depart"  onChangeText={handleChange('depart')}/>
+          label="Depart"  onChangeText={handleChange('depart')}
+          style={styles.inputStyle}
+          />
 
          <TextInput 
          dense={true}
          underlineColor="#FFFFFF"
          numberOfLines={50}
          theme={{ colors: {  background: 'white'  } }}
-          label="Arrivée" onChangeText={handleChange('arrive')}/>
+          label="Arrivée" onChangeText={handleChange('arrive')}
+          style={{height:47}}/>
+
+        <TextInput 
+         dense={true}
+         underlineColor="#FFFFFF"
+         numberOfLines={50}
+         theme={{ colors: {  background: 'white'  } }}
+          label="Prix DT" onChangeText={handleChange('prix')}
+          style={{height:47,marginTop:10}}
+          keyboardType="number-pad"/>
+
          <View style={styles.nbPlaceContainer}>
 
          <Chip style={{marginTop:10,width:'100%'}} >
@@ -242,7 +262,8 @@ const styles = StyleSheet.create({
   inputStyle:
   {
     marginTop:10,
-    marginBottom:10
+    marginBottom:10,
+    height:47
   },
   nbPlace:
   {

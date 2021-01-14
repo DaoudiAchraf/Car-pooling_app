@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import { Image, LogBox } from "react-native";
 import { AppLoading } from "expo";
 import { useFonts } from '@use-expo/font';
@@ -17,6 +17,8 @@ import { Images, articles, argonTheme } from "./constants";
 import Register from "./screens/Register";
 import AuthContext from "./Context/Context";
 import Event from "./screens/Event";
+import authStorage from  './Context/Storage';
+import jwtDecode from 'jwt-decode';
 
 // cache app images
 const assetImages = [
@@ -28,6 +30,11 @@ const assetImages = [
   Images.iOSLogo,
   Images.androidLogo
 ];
+
+
+
+
+
 
 // cache product images
 articles.map(article => assetImages.push(article.image));
@@ -47,6 +54,18 @@ LogBox.ignoreLogs([
 
 export default props => {
   
+  const [user,setUser] = useState();
+ 
+  const restoreToken = async () => {
+    const token = await authStorage.getToken();
+    if(!token) return;
+    setUser(jwtDecode(token))
+    //console.log("current User",);
+  }
+
+  useEffect(()=>{
+    restoreToken().then()
+    },[]);
   
   const [isLoadingComplete, setLoading] = useState(false);
   let [fontsLoaded] = useFonts({
@@ -67,7 +86,7 @@ export default props => {
     setLoading(true);
   };
 
-  const [user,setUser] = useState();
+
 
   if(!fontsLoaded && !isLoadingComplete) {
     return (

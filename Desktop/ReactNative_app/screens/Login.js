@@ -16,6 +16,7 @@ import auth from '../MyApi/Auth';
 import jwtDecode from 'jwt-decode';
 import AuthContext from "../Context/Context";
 import { Snackbar } from 'react-native-paper';
+import authStorage from  '../Context/Storage';
 
 const { width, height } = Dimensions.get("screen");
 
@@ -33,32 +34,35 @@ const Login =({navigation})=> {
 
   const Submit = ({email,password})=>
   {
-    navigation.navigate("profile");
-    // if(email === '' && password === '' )
-    //     onToggleSnackBar(true);
-    // else if (email === '' )
-    // {
-    //   setErrorMSG("Entrer Votre email");
-    //   onToggleSnackBar(true);
+    if(email === '' && password === '' )
+        onToggleSnackBar(true);
+    else if (email === '' )
+    {
+      setErrorMSG("Entrer Votre email");
+      onToggleSnackBar(true);
       
-    // }
-    // else if( password === '')
-    // { 
-    //   setErrorMSG("Enter votre mot de passe");
-    //   onToggleSnackBar(true);
-    // }
-    // else auth.login(email,password).then(res=>{
-    //     // const user = jwtDecode(res.data.token);
-    //     // console.log("==>",user);
-        
-    //     // authContext.setUser(user);
+    }
+    else if( password === '')
+    { 
+      setErrorMSG("Enter votre mot de passe");
+      onToggleSnackBar(true);
+    }
+    else
+     auth.login(email,password).then(res=>{
+        const user = jwtDecode(res.data.token);
+        authStorage.storeToken(res.data.token);
 
-    //     // console.log(authContext.user);
-     
-    //     // navigation.navigate("profile");
+        console.log("==>",user);
+
+        authContext.setUser(user);
+
+        //console.log("==>",authContext.user);
+
+
+        navigation.navigate("Home");
        
 
-    // });
+    });
   }
 
     return (

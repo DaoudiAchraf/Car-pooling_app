@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Easing, Animated, Dimensions } from "react-native";
 
 import { createStackNavigator } from "@react-navigation/stack";
@@ -24,6 +24,8 @@ import CustomDrawerContent from "./Menu";
 import { Icon, Header } from "../components";
 import { argonTheme, tabs } from "../constants";
 import Login from "../screens/Login";
+import AuthContext from "../Context/Context";
+import authStorage from  '../Context/Storage';
 
 const { width } = Dimensions.get("screen");
 
@@ -92,7 +94,9 @@ function ArticlesStack(props) {
               scene={scene}
             />
           ),
-          headerTransparent: true
+          headerTransparent: true,
+      
+        
         }}
       />
     </Stack.Navigator>
@@ -223,11 +227,13 @@ function RegisterStack(props) {
 }
 
 export default function OnboardingStack(props) {
+  
+  const {user} = useContext(AuthContext);
   return (
     <Stack.Navigator mode="card" headerMode="none">
       <Stack.Screen
         name="Onboarding"
-        component={Onboarding}
+        component={user ? AppStack : Onboarding}
         option={{
           headerTransparent: true
         }}
@@ -251,8 +257,8 @@ export function LoginStack(props) {
         }}
       />
       {/* <Stack.Screen name="profile" component={Profile} /> */}
-      <Stack.Screen name="profile" component={AppStack} />
-      <Stack.Screen name="Home" component={HomeStack} />
+      <Stack.Screen name="Home" component={AppStack} />
+
       
     </Stack.Navigator>
   );
@@ -260,13 +266,22 @@ export function LoginStack(props) {
 
 
 function AppStack(props) {
+
+  function Logout(){
+    alert("Logout")
+    authStorage.removeToken();
+    const { setUser } = useContext(AuthContext);
+    setUser(null);
+  }
+
   return (
     <Drawer.Navigator
       style={{ flex: 1 }}
       drawerContent={props => <CustomDrawerContent {...props} />}
       drawerStyle={{
         backgroundColor: "white",
-        width: width * 0.8
+        width: width * 0.8,
+
       }}
       drawerContentOptions={{
         activeTintcolor: "white",
@@ -295,6 +310,7 @@ function AppStack(props) {
       <Drawer.Screen name="Account" component={Register} />
       <Drawer.Screen name="Elements" component={EventStack} />
       <Drawer.Screen name="Articles" component={ArticlesStack} />
+      <Drawer.Screen name="Logout" component={Logout}  />
     </Drawer.Navigator>
   );
 }
