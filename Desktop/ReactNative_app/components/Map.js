@@ -4,7 +4,7 @@ import { StyleSheet, Text, View, Dimensions,PermissionsAndroid, Image } from 're
 import { Button,Surface,Avatar} from 'react-native-paper';
 import { AntDesign,FontAwesome5,FontAwesome,Entypo,MaterialCommunityIcons } from '@expo/vector-icons';
 import Images from "../constants/Images";
-import MapViewDirections from 'react-native-maps-directions';
+import EventService  from '../MyApi/Events';
 
 
 const origin = {latitude: 37.3318456, longitude: -122.0296002};
@@ -18,14 +18,31 @@ export default function App({navigation,route}) {
     const [depart , setDepart] = useState(true);
     const [btnDisabled,setBtnDisabled] = useState(true);
     const [btnColor,setBtnColor] = useState("#2F4B97");
-    
+
+    const [loading,setLoading] = useState(false);
+
     const onChange = ()=>{
         setLoading(false);
         setDepart(false);
-        setBtnDisabled(true);
+        setBtnDisabled(true);   
     }
 
-    const [loading,setLoading] = useState(false);
+    const addEvent = ()=>
+    {
+      EventService.AddEvent({
+        ...covoiturageInfo,
+        depart:{
+          name:covoiturageInfo.depart,
+          ...state.departMarker[0],
+        },
+        arrive:{
+          name:covoiturageInfo.arrive,
+          ...state.arriveMarker[0],
+        } 
+      }).then(()=>console.log('skrjiya'))
+      console.log("state::::::",state)
+    
+    }
 
     const [state,setState] = useState({
         region: {
@@ -34,7 +51,8 @@ export default function App({navigation,route}) {
           latitudeDelta: 8,
           longitudeDelta: 2
         },
-        markers: []        // Here it is
+        departMarker: [],
+        arriveMarker: []
       });
 
       // onMapReady={() => {
@@ -54,38 +72,39 @@ export default function App({navigation,route}) {
     //    showsMyLocationButton={true}
       style={styles.map}
       onPress={(e) => {
-          ((depart && state.markers.length == 0)||(!depart && state.markers.length < 2))&&
-            setState({ markers: [...state.markers, { latlng: e.nativeEvent.coordinate,depart:depart }] }) 
-            setBtnDisabled(false);
+          if(depart)
+           {
+             setState({...state, departMarker: [{ latlng: e.nativeEvent.coordinate}] })
+             console.log('depart',depart);
+           }
+            
+          else
+          {
+            setState({...state, arriveMarker: [{ latlng: e.nativeEvent.coordinate}] })
+            console.log('depart',depart);
+          }
+     
+          setBtnDisabled(false);
 
-          
-          console.log(state.markers); 
         }}>
            {/* <Polyline    strokeWidth={2}
                 strokeColor="red" coordinates={[{latitude:35.637168562991455,longitude: 9.514671117067337},
           {latitude:32.514761824077375,longitude: 7.282373495399952}]}/> */}
     {
-     state.markers.map((marker, i) => (
-      marker.depart &&
+     state.departMarker.map((marker, i) => (
         <MapView.Marker key={i} coordinate={marker.latlng} >
           <Image source={require('../assets/carDep.png')} style={{height: 35, width:35 }} />
-       
         </MapView.Marker>  
     ))    
     }
 
     {
-     state.markers.map((marker, i) => (
-      !marker.depart &&
+     state.arriveMarker.map((marker, i) => (
         <MapView.Marker key={i} coordinate={marker.latlng} >
           <Image source={require('../assets/carArr.png')} style={{height: 34, width:34 }}/>
-        
-   
         </MapView.Marker>  
     ))    
     }
-
-
 
     </MapView>
     <Surface style={styles.surface}>
@@ -98,12 +117,14 @@ export default function App({navigation,route}) {
      }
     
      </Surface >
-     
-
-
+  
   
     <Button disabled={btnDisabled} mode="contained" color={btnColor} loading={loading} onPress={() =>
-        {setLoading(true)
+        {
+          if(!depart)
+              addEvent()
+
+          setLoading(true)
          setTimeout(()=>onChange(), 3000)} }>
              
             <Entypo name="location-pin" size={20} color="#7B8ADE" />
@@ -119,8 +140,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     alignItems: 'center',
-    paddingTop:40
-    
+  
   },
   map: {
     width: Dimensions.get('window').width,
@@ -137,8 +157,7 @@ const styles = StyleSheet.create({
       paddingRight:20,
       marginBottom:"5%",
       opacity:0.95
-    
-      
+     
   },
   surface: {
     paddingBottom:20,
@@ -146,8 +165,8 @@ const styles = StyleSheet.create({
     width: Dimensions.get('window').width*0.8,
     alignItems: 'center',
     justifyContent: 'center',
-   
-    top:-150,backgroundColor: 'transparent'
-    
+    position:"absolute",
+    bottom:0,
+    backgroundColor: 'transparent'
   },
 });

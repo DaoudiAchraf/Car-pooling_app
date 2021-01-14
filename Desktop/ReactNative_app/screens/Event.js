@@ -24,21 +24,18 @@ const { width, height } = Dimensions.get('window')
 
     const onDismissSnackBar = () => setVisible(false);
 
-    var option ;
+    var option = 0 ;
 
     const [ErrorMSG, setErrorMSG] = React.useState("Veillez remplir tout les champs")
    
     const Submit = ({phone,depart,arrive})=>
     {
-      //console.log(date);
-
-     
-
-      const formData = {
+    
+     const formData = {
         phone,
         depart,
         arrive,
-        option,
+        places:++option,
         date
       }
       navigation.navigate("Map",{covoiturageInfo:formData });
