@@ -16,6 +16,7 @@ import Register from "../screens/Register";
 import Elements from "../screens/Elements";
 import Articles from "../screens/Articles";
 import Event from "../screens/Event";
+import Mytravels from "../screens/Mytravels";
 import Map from "../components/Map";
 // drawer
 import CustomDrawerContent from "./Menu";
@@ -226,6 +227,33 @@ function RegisterStack(props) {
   );
 }
 
+function MytravelsStack(props) {
+  return (
+    <Stack.Navigator mode="card" headerMode="screen">
+      <Stack.Screen
+        name="Mytravels"
+        component={Mytravels}
+        options={{
+          header: ({ navigation, scene }) => (
+            <Header
+              title="My travels"
+              search
+              options
+              navigation={navigation}
+              scene={scene}
+            />
+          ),
+          cardStyle: { backgroundColor: "#F8F9FE" }
+        }}
+      />
+    </Stack.Navigator>
+  );
+}
+
+
+
+
+
 export default function OnboardingStack(props) {
   
   const {user} = useContext(AuthContext);
@@ -303,13 +331,13 @@ function AppStack(props) {
           fontWeight: "normal"
         }
       }}
-      initialRouteName="Home"
-    >
+      initialRouteName="Home">
       <Drawer.Screen name="Home" component={HomeStack} />
       <Drawer.Screen name="Profile" component={ProfileStack} />
       <Drawer.Screen name="Account" component={Register} />
       <Drawer.Screen name="Elements" component={EventStack} />
       <Drawer.Screen name="Articles" component={ArticlesStack} />
+      <Drawer.Screen name="My travels" component={MytravelsStack} />
       <Drawer.Screen name="Logout" component={Logout}  />
     </Drawer.Navigator>
   );

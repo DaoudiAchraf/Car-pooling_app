@@ -78,8 +78,8 @@ const { width, height } = Dimensions.get('window')
       <View style={styles.container}>
            
            <ImageBackground
-      style={{ height: height,width: width, position: 'absolute', resizeMode: 'cover' }} 
-      source={require("../assets/splash.png")}/>
+              style={{ height: height,width: width, position: 'absolute', resizeMode: 'cover' }} 
+              source={require("../assets/splash.png")}/>
 
         <View style={{alignItems:"center",marginBottom:0}}>
              

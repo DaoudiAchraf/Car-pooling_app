@@ -1,16 +1,26 @@
-import React from 'react';
+import React,{useContext} from 'react';
 import { withNavigation } from '@react-navigation/compat';
 import PropTypes from 'prop-types';
-import { StyleSheet, Dimensions, Image, TouchableWithoutFeedback } from 'react-native';
+import { StyleSheet, Dimensions,Alert, Image, TouchableWithoutFeedback } from 'react-native';
 import { Block, Text, theme } from 'galio-framework';
-
+import Button from './Button'
 import { argonTheme } from '../constants';
+import convert from "../constants/date";
+import { event, set } from 'react-native-reanimated';
+import { MaterialIcons } from '@expo/vector-icons'; 
+
+import  EventService  from "../MyApi/Events";
+import AuthContext from "../Context/Context";
 
 
-class Card extends React.Component {
-  render() {
-    const { navigation, item, horizontal, full, style, ctaColor, imageStyle } = this.props;
+ Card=(props)=>{
+
+    const { navigation, item, horizontal, full, style, ctaColor, subs,remove,update , events, setEvents,imageStyle } = props;
     
+
+    const { user } = useContext(AuthContext)
+
+
     const imageStyles = [
       full ? styles.fullImage : styles.horizontalImage,
       imageStyle
@@ -21,23 +31,134 @@ class Card extends React.Component {
       styles.shadow
     ];
 
+    const confirmDelete = () =>
+    Alert.alert(
+      "",
+      "Are you sure you want to delete this item",
+      [
+        {
+          text: "No",
+          style: "cancel"
+        },
+        { text: "Yes", onPress: () => handleDelete() }
+      ],
+      { cancelable: false }
+    );
+
+
+
+    function handleSubscribe(){         
+
+      let newArr=[];
+
+      events.forEach(event => {
+          if(event._id==item._id)
+            event.subscribers.push(user.userId);
+          
+          newArr.push(event);
+      });
+      setEvents(newArr);
+      EventService.subscribeToEvent(user.userId,item._id)
+    }
+
+    function handleUnSubscribe(){  
+      let newArr=[];
+
+      events.forEach(event => {
+          if(event._id==item._id)
+            event.subscribers=event.subscribers.filter((event)=>event!=user.userId);
+          
+          newArr.push(event);
+      });
+      setEvents(newArr);
+
+      EventService.unSubscribeToEvent(user.userId,item._id)
+    }
+
+    function handleDelete() {
+
+
+        setEvents(prv=>{let newarr =prv.filter(x=> x._id!=item._id);return [...newarr]});
+      EventService.deleteEvent(item._id)  
+    }
+
+
+    const btn_sub = <Button style={styles.Button} onPress={handleSubscribe}>
+                      <Text style={styles.subscribe}>Subscribe</Text>
+                    </Button>;
+
+
+
+    const btn_unsub = <Button color="success" style={styles.Button} onPress={handleUnSubscribe}>
+                    <Text style={styles.subscribe}>Subscribed</Text>
+                    </Button>;
+
+
+    
+    const btn_update=<Button color="Success" style={styles.Button,styles.Button_update} >
+
+
+                            <Block flex={1} row={true} center={true}>
+                                  <MaterialIcons name="update" size={25}   color="white" />
+                                    <Text style={styles.subscribe}>
+                                      Update
+                                    </Text>
+                            </Block>
+                      </Button>;
+
+
+                      const btn_delete=<Button color="Error" style={styles.Button}
+                             onPress={confirmDelete}>
+
+                            <Block flex={1} row={true} center={true}>
+                                  <MaterialIcons name="delete" size={25}   color="white" />
+                                    <Text style={styles.subscribe}>
+                                      Delete
+                                    </Text>
+                            </Block>
+                          </Button>;
+
+
+
     return (
       <Block row={horizontal} card flex style={cardContainer}>
-        <TouchableWithoutFeedback onPress={() => navigation.navigate('Pro')}>
+        {/* <TouchableWithoutFeedback onPress={() => navigation.navigate('Pro')}>
           <Block flex style={imgContainer}>
             <Image source={{uri: item.image}} style={imageStyles} />
           </Block>
-        </TouchableWithoutFeedback>
-        <TouchableWithoutFeedback onPress={() => navigation.navigate('Pro')}>
+        </TouchableWithoutFeedback> */}
+
+        
+        <TouchableWithoutFeedback >
           <Block flex space="between" style={styles.cardDescription}>
-            <Text size={14} style={styles.cardTitle}>{item.title}</Text>
-            <Text size={12} muted={!ctaColor} color={ctaColor || argonTheme.COLORS.ACTIVE} bold>{item.cta}</Text>
+            <Text style={styles.cardTitle}>
+              From: <Text style={styles.values}>{item.depart.name}</Text>
+            </Text>
+
+            <Text style={styles.cardTitle}>
+              To: <Text style={styles.values}>{item.arrive.name}</Text>
+            </Text>
+            
+            <Text style={styles.cardTitle}>
+              Date: <Text style={styles.values}>{convert(item.date).date}</Text>
+            </Text>
+            
+            <Text style={styles.cardTitle}>
+              Time: <Text style={styles.values}>{convert(item.date).time}</Text>
+            </Text>
+
+            <Text style={styles.cardTitle}>
+              Price: <Text style={styles.values}>{item.prix}</Text>
+            </Text>
+
+            {item.subscribers.indexOf(user.userId)?btn_sub:btn_unsub}
+            {remove?btn_delete:null}
+            {update?btn_update:null}
           </Block>
         </TouchableWithoutFeedback>
       </Block>
     );
   }
-}
 
 Card.propTypes = {
   item: PropTypes.object,
@@ -48,8 +169,21 @@ Card.propTypes = {
 }
 
 const styles = StyleSheet.create({
+
+  Button:{
+    position:'absolute',
+    bottom:0,
+    right:0,
+    width:Dimensions.get("screen").width * 0.3
+  },
+  Button_update:{
+    position:'absolute',
+    bottom:50,
+    right:0,
+    width:Dimensions.get("screen").width * 0.3
+  },
   card: {
-    backgroundColor: theme.COLORS.WHITE,
+    backgroundColor: 'rgba(280,280,255,0.85)',
     marginVertical: theme.SIZES.BASE,
     borderWidth: 0,
     minHeight: 114,
@@ -58,7 +192,10 @@ const styles = StyleSheet.create({
   cardTitle: {
     flex: 1,
     flexWrap: 'wrap',
-    paddingBottom: 6
+    paddingBottom: 6,
+    fontSize:16,
+    fontWeight:'bold',
+    color:argonTheme.COLORS.PRIMARY
   },
   cardDescription: {
     padding: theme.SIZES.BASE / 2
@@ -93,6 +230,16 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     elevation: 2,
   },
+  subscribe:{
+    color:"white",
+    fontSize:18
+  },
+  values:{
+    fontSize:15,
+    textTransform:'capitalize',
+    color:"gray"
+
+  }
 });
 
-export default withNavigation(Card);
+export default Card;

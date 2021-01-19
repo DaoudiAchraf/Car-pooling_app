@@ -63,7 +63,6 @@ const Register =()=> {
                     <Block width={width * 0.8} style={{ marginBottom: 15 }}>
                       <Input
                         onChangeText={handleChange('name')}
-                        
                         borderless
                         placeholder="Name"
                         iconContent={

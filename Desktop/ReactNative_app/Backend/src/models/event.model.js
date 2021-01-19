@@ -33,6 +33,9 @@ const eventSchema = new Schema({
   },
   prix: {
     type: Number
+  },
+  subscribers:{
+    type:Array
   }
 })
 

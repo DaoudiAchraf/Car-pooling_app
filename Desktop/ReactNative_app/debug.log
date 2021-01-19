@@ -19,3 +19,5 @@
 [0114/011236.571:ERROR:exception_snapshot_win.cc(99)] thread ID 20112 not found in process
 [0114/011236.344:ERROR:process_reader_win.cc(123)] NtOpenThread: {Accès refusé} Un processus a demandé l’accès a un objet, mais il ne bénéficie pas des autorisations nécessaires. (0xc0000022)
 [0114/011236.571:ERROR:exception_snapshot_win.cc(99)] thread ID 13024 not found in process
+[0116/051611.494:ERROR:directory_reader_win.cc(43)] FindFirstFile: The system cannot find the path specified. (0x3)
+[0119/204942.283:ERROR:directory_reader_win.cc(43)] FindFirstFile: The system cannot find the path specified. (0x3)
