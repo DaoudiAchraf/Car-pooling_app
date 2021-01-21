@@ -11,39 +11,51 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import AuthContext from "../Context/Context";
 
 import { Formik } from 'formik';
+import { set } from "react-native-reanimated";
 
 //const { width } = Dimensions.get("screen");
-
 
 const { width, height } = Dimensions.get('window')
 
   const Elements = ({navigation}) => {
    
-    const [AbsColor,setAbsColor] = React.useState('black');
-    const [temp,setTemp] = React.useState('black');
     const [visible, setVisible] = React.useState(true);
 
     const onDismissSnackBar = () => setVisible(false);
 
     var option = 0 ;
 
-    const [ErrorMSG, setErrorMSG] = React.useState("Veillez remplir tout les champs")
-
     const { user } =useContext(AuthContext)
    
-    const Submit = ({phone,depart,arrive,prix})=>
-    {
-    
-     const formData = {
-        phone,
-        depart,
-        arrive,
-        prix,
-        places:++option,
-        date,
-        user: user.userId
+    const[phoneError,setphoneError] = useState(false)
+    const[departError,setDepartError] = useState(false)
+    const[arriveError,setArriveError] = useState(false)
+    const[prixError,setPrixError] = useState(false)
+
+    const Submit = ({phone,depart,arrive,prix})=>{ 
+     
+      if(phone === '')
+        setphoneError(true)
+      if(depart === '')
+        setDepartError(true)
+      if(arrive === '')
+        setArriveError(true)
+      if(prix === '')
+        setPrixError(true)
+      if(phone !=='' && depart!=='' && arrive!=='' && prix!=='')
+      {
+          const formData = {
+          phone,
+          depart,
+          arrive,
+          prix,
+          places:++option,
+          date,
+          user: user.userId
+        }
+        navigation.replace("Map",{covoiturageInfo:formData });
       }
-      navigation.navigate("Map",{covoiturageInfo:formData });
+  
     }
      
 
@@ -71,17 +83,17 @@ const { width, height } = Dimensions.get('window')
      };
 
 
-  
-
     return (
   
       <View style={styles.container}>
-           
+       
            <ImageBackground
               style={{ height: height,width: width, position: 'absolute', resizeMode: 'cover' }} 
               source={require("../assets/splash.png")}/>
-
+               
+       
         <View style={{alignItems:"center",marginBottom:0}}>
+          
              
         <FontAwesome5 name="car" size={90} color="white" />
              <Text
@@ -98,8 +110,9 @@ const { width, height } = Dimensions.get('window')
       onSubmit={Submit}
     >
        {({ handleChange,handleSubmit}) => (
-      <>
-      <View style={{padding:30}}>
+      <>  
+      <View style={styles.formStyle}>
+        
          <TextInput
             dense={true}
             underlineColor="#FFFFFF"
@@ -109,6 +122,7 @@ const { width, height } = Dimensions.get('window')
             onChangeText={handleChange('phone')}
             keyboardType="numeric"
             style={{height:47}}
+            error={phoneError}
            />
 
          <TextInput
@@ -118,6 +132,7 @@ const { width, height } = Dimensions.get('window')
           theme={{ colors: { underlineColor: '#FFFFFF', background: 'white'  } }}
           label="Depart"  onChangeText={handleChange('depart')}
           style={styles.inputStyle}
+          error={departError}
           />
 
          <TextInput 
@@ -126,16 +141,20 @@ const { width, height } = Dimensions.get('window')
          numberOfLines={50}
          theme={{ colors: {  background: 'white'  } }}
           label="Arrivée" onChangeText={handleChange('arrive')}
-          style={{height:47}}/>
+          style={{height:47}}
+          error={arriveError}
+          />
 
         <TextInput 
          dense={true}
          underlineColor="#FFFFFF"
          numberOfLines={50}
          theme={{ colors: {  background: 'white'  } }}
-          label="Prix DT" onChangeText={handleChange('prix')}
-          style={{height:47,marginTop:10}}
-          keyboardType="number-pad"/>
+         label="Prix DT" onChangeText={handleChange('prix')}
+         style={{height:47,marginTop:10}}
+         keyboardType="number-pad"
+         error={prixError}
+          />
 
          <View style={styles.nbPlaceContainer}>
 
@@ -193,6 +212,8 @@ const { width, height } = Dimensions.get('window')
             onPress={handleSubmit}>
               Valider
             </Button>
+            
+            
 
             <View>
       
@@ -207,30 +228,33 @@ const { width, height } = Dimensions.get('window')
           onChange={onChange}
         />
       )}
+      
+      
     </View>
 
             {/* ........................ */}
-            </View>
-            </>)}
+     
+    </View>
+
             
-            </Formik>
+    </>)}
+    
             
-      {/* 
-      <Snackbar duration={7000} style={{position: 'absolute',bottom:0}}
-          visible={visible}
+    </Formik>
+            
+
+    <View >
+         <Snackbar duration={7000} style={{position: 'absolute',bottom:0}}
+          visible={false}
           onDismiss={onDismissSnackBar}
           action={{
-            label: 'Undo',
-            onPress: () => {
-              // Do something
-            },
+            label: 'Error',
+        
           }}>
-          Hey there! I'm a Snackbar.
-      </Snackbar>
-            
-      */}
-
-      </View>
+          Veillez remplir les champs
+        </Snackbar></View>
+  
+     </View>
    
    
     );
@@ -246,6 +270,11 @@ const styles = StyleSheet.create({
     width:width,
     height:height,
   
+  },
+  formStyle:{
+    paddingTop:27,
+    paddingRight:30,
+    paddingLeft:30
   },
   nbPlaceContainer:{
     flexDirection:"row",
@@ -277,6 +306,7 @@ const styles = StyleSheet.create({
     justifyContent:"center",
     flex:2
   }
+
 
 });
 

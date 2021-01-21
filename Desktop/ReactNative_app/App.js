@@ -19,6 +19,7 @@ import AuthContext from "./Context/Context";
 import Event from "./screens/Event";
 import authStorage from  './Context/Storage';
 import jwtDecode from 'jwt-decode';
+import OnboardingStack from "./navigation/Screens";
 
 // cache app images
 const assetImages = [
@@ -48,9 +49,11 @@ function cacheImages(images) {
     }
   });
 }
+
 LogBox.ignoreLogs([
   'Non-serializable values were found in the navigation state',
 ]);
+LogBox.ignoreAllLogs();
 
 export default props => {
   
@@ -103,8 +106,6 @@ export default props => {
             <GalioProvider theme={argonTheme}>
               <Block flex>
                   <Screens/>
-              {/* <Event/> */}
-              {/* <Map/>  */}
               </Block>
             </GalioProvider>
           </NavigationContainer>
@@ -115,44 +116,3 @@ export default props => {
   }
 }
 
-// export default class App extends React.Component {
-//   state = {
-//     isLoadingComplete: false
-//   };
-
-//   render() {
-//     if (!this.state.isLoadingComplete) {
-//       return (
-//         <AppLoading
-//           startAsync={this._loadResourcesAsync}
-//           onError={this._handleLoadingError}
-//           onFinish={this._handleFinishLoading}
-//         />
-//       );
-//     } else {
-//       return (
-//         <NavigationContainer>
-//           <GalioProvider theme={argonTheme}>
-//             <Block flex>
-//               <Screens />
-//             </Block>
-//           </GalioProvider>
-//         </NavigationContainer>
-//       );
-//     }
-//   }
-
-//   _loadResourcesAsync = async () => {
-//     return Promise.all([...cacheImages(assetImages)]);
-//   };
-
-//   _handleLoadingError = error => {
-//     // In this case, you might want to report the error to your error
-//     // reporting service, for example Sentry
-//     console.warn(error);
-//   };
-
-//   _handleFinishLoading = () => {
-//     this.setState({ isLoadingComplete: true });
-//   };
-// }
