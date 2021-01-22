@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   StyleSheet,
   ImageBackground,
@@ -13,14 +13,44 @@ import { Button, Icon, Input } from "../components";
 import { Images, argonTheme } from "../constants";
 import { Formik } from 'formik';
 import auth from '../MyApi/Auth';
+import { set } from "react-native-reanimated";
+import { Snackbar,Modal, ActivityIndicator } from 'react-native-paper';
 
 const { width, height } = Dimensions.get("screen");
 
 const Register =()=> {
 
+    const [visible, setVisible] = React.useState(false);
+
+    const [ErrorMSG, setErrorMSG] = React.useState();
+
+    const snackBarError = (errorMsg)=> {
+      setErrorMSG(errorMsg)
+      setVisible(!visible);
+    }
+
+    const onDismissSnackBar = () => setVisible(false);
+    const [visibleModal, setVisibleModal] = React.useState(false);
+
   const Submit = ({name,email,password})=>
   {
-    auth.register(name,email,password).then(res=>console.log("==>",res));
+  
+   if(name === '' && email === '' && password === '')
+      snackBarError("Remplir tout les champs");
+   else if(name === '')
+      snackBarError("Entrer Votre nom");
+   
+   else if(email === '')
+      snackBarError("Entrer Votre email");
+    
+   else if(password === '')
+      snackBarError("Entrer Votre mot de passe");
+   else
+   {
+      setVisibleModal(true);
+      auth.register(name,email,password).then(res=>console.log("==>",res));
+   }
+      
   }
 
     return (
@@ -30,6 +60,18 @@ const Register =()=> {
     >
       {({ handleChange,handleSubmit}) => (
       <>
+      <Snackbar duration={7000} style={{position: 'absolute',bottom:0}}
+          visible={visible}
+          onDismiss={onDismissSnackBar}
+          action={{
+            label: 'Error',
+            onPress: () => {
+          
+            },
+          }}>
+          {ErrorMSG}
+      </Snackbar>
+
       <Block flex middle>
         <StatusBar hidden />
         <ImageBackground
@@ -148,6 +190,9 @@ const Register =()=> {
                   </KeyboardAvoidingView>
                 </Block>
               </Block>
+              <Modal  visible={visibleModal} >
+                <ActivityIndicator size={50} animating={true} />
+              </Modal>
             </Block>
           </Block>
         </ImageBackground>

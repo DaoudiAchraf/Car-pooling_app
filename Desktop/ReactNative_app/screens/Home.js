@@ -1,6 +1,6 @@
 import React,{useState,useEffect,useContext} from 'react';
 import { StyleSheet, Dimensions, ScrollView, ImageBackground } from 'react-native';
-import { Block, theme,Text } from 'galio-framework';
+import { Block, theme,Text, Button } from 'galio-framework';
 
 import { Card } from '../components';
 import articles from '../constants/articles';
@@ -16,7 +16,7 @@ import {Input,Icon} from "../components";
 
 const { width,height } = Dimensions.get('screen');
 
-  Home = ()=> 
+  Home = ({navigation})=> 
   {
 
       const { user } =useContext(AuthContext);
@@ -28,7 +28,6 @@ const { width,height } = Dimensions.get('screen');
 
 
       useEffect(() => {
-        
         EventService.getEvent(user.userId).then(res=>{
           setEvents(res.data)     
           setInitEvents(res.data)     
@@ -41,7 +40,9 @@ const { width,height } = Dimensions.get('screen');
    {
 
          return (
+        
        <Block row={true} style={{width:width,position:'relative',top:-5,marginBottom:-13}}>
+          
            <Input 
              placeholder="From"
              borderless
@@ -70,6 +71,7 @@ const { width,height } = Dimensions.get('screen');
           }}
              
            />
+
          </Block>
         )
    }

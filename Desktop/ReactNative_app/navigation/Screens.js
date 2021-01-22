@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { Easing, Animated, Dimensions } from "react-native";
 
 import { createStackNavigator } from "@react-navigation/stack";
@@ -17,10 +17,10 @@ import Elements from "../screens/Elements";
 import Articles from "../screens/Articles";
 import Event from "../screens/Event";
 import Mytravels from "../screens/Mytravels";
-import UpdateEvent from "../screens/UpdateEvent";
+import UpdateEvent from "../screens/UpdateEvent"; 
 import Map from "../components/Map";
 // drawer
-import CustomDrawerContent from "./Menu";
+import CustomDrawerContent from "./Menu";   
 
 // header for screens
 import { Icon, Header } from "../components";
@@ -207,8 +207,10 @@ function EventStack(props) {
           cardStyle: { backgroundColor: "#F8F9FE" }
         }}
       />
-      
-      <Stack.Screen name="Map" component={Map} />
+
+      {/* <Stack.Screen 
+       options={{headerShown: false}}
+       name="myTravels" component={AppStack2} /> */}
     </Stack.Navigator>
   );
 }
@@ -219,6 +221,7 @@ function RegisterStack(props) {
       <Stack.Screen
         name="Onboarding"
         component={Onboarding}
+        route={route}
         option={{
           headerTransparent: true
         }}
@@ -265,10 +268,22 @@ function UpdateEventStack(props) {
 
 
 
+function MapStack(props) {
+  return(
+    <Stack.Navigator mode="card" headerMode="none">
+      <Stack.Screen  name="Map" component={Map}/>
+      <Stack.Screen  name="My travels" component={MytravelsStack}/>
+    </Stack.Navigator>
+  );
+}
+
+
+
+
 
 export default function OnboardingStack(props) {
-  
   const {user} = useContext(AuthContext);
+  
   return (
     <Stack.Navigator mode="card" headerMode="none">
       <Stack.Screen
@@ -280,13 +295,12 @@ export default function OnboardingStack(props) {
       />
       <Stack.Screen name="Login" component={LoginStack} />
       <Stack.Screen name="Register" component={Register} />
-      {/* <Stack.Screen name="profile" component={Profile} /> */}
-      {/* <Stack.Screen name="Login" component={AppStack} /> */}
     </Stack.Navigator>
   );
 }
 
 export function LoginStack(props) {
+  const { user } = useContext(AuthContext);
   return (
     <Stack.Navigator mode="card" headerMode="none">
       <Stack.Screen
@@ -297,7 +311,10 @@ export function LoginStack(props) {
         }}
       />
       {/* <Stack.Screen name="profile" component={Profile} /> */}
-      <Stack.Screen name="Home" component={AppStack} />
+      
+      {user? <Stack.Screen name="Home" component={AppStack} />
+      : <Stack.Screen name="Home" component={OnboardingStack} />}
+     
 
       
     </Stack.Navigator>
@@ -305,16 +322,64 @@ export function LoginStack(props) {
 }
 
 
-function AppStack(props) {
-
-  function Logout(){
-    alert("Logout")
-    authStorage.removeToken();
-    const { setUser } = useContext(AuthContext);
-    setUser(null);
-  }
-
+function AppStack2(props) {  
   return (
+ 
+    <Drawer.Navigator
+      style={{ flex: 1 }}
+      drawerContent={props => <CustomDrawerContent {...props} />}
+      drawerStyle={{
+        backgroundColor: "white",
+        width: width * 0.8,
+
+      }}
+      drawerContentOptions={{
+        activeTintcolor: "white",
+        inactiveTintColor: "#000",
+        activeBackgroundColor: "transparent",
+        itemStyle: {
+          width: width * 0.75,
+          backgroundColor: "transparent",
+          paddingVertical: 16,
+          paddingHorizonal: 12,
+          justifyContent: "center",
+          alignContent: "center",
+          alignItems: "center",
+          overflow: "hidden"
+        },
+        labelStyle: {
+          fontSize: 18,
+          marginLeft: 12,
+          fontWeight: "normal"
+        }
+      }}
+      initialRouteName="My travels">
+      <Drawer.Screen name="Home" component={HomeStack} />
+      <Drawer.Screen name="Profile" component={ProfileStack} />
+      <Drawer.Screen name="Account" component={Register} />
+      <Drawer.Screen name="Elements" component={EventStack} />
+      <Drawer.Screen name="Articles" component={ArticlesStack} />
+      <Drawer.Screen name="My travels" component={MytravelsStack} />
+      <Drawer.Screen name="Map" component={MapStack} />
+      <Drawer.Screen name="Logout" component={Logout}  />
+    </Drawer.Navigator>
+  
+  )
+
+}
+
+function Logout(){
+  authStorage.removeToken();
+  const { setUser } = useContext(AuthContext);
+  setUser(null);
+  return (
+    <OnboardingStack/>)
+ 
+}
+
+function AppStack(props) {  
+  return (
+ 
     <Drawer.Navigator
       style={{ flex: 1 }}
       drawerContent={props => <CustomDrawerContent {...props} />}
@@ -350,9 +415,12 @@ function AppStack(props) {
       <Drawer.Screen name="Elements" component={EventStack} />
       <Drawer.Screen name="Articles" component={ArticlesStack} />
       <Drawer.Screen name="My travels" component={MytravelsStack} />
+      <Drawer.Screen name="Map" component={MapStack} />
       <Drawer.Screen name="UpdateEvent" component={UpdateEventStack} />
       <Drawer.Screen name="Logout" component={Logout}  />
     </Drawer.Navigator>
-  );
+  
+  )
+
 }
 

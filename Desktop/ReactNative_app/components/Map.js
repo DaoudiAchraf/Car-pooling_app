@@ -1,23 +1,21 @@
-import React ,{useState,useEffect,useContext}from 'react';
+import React ,{useState}from 'react';
 import MapView,{Polygon, Polyline} from 'react-native-maps';
-import { StyleSheet, Text, View, Dimensions,PermissionsAndroid, Image } from 'react-native';
-import { Button,Surface,Avatar} from 'react-native-paper';
-import { AntDesign,FontAwesome5,FontAwesome,Entypo,MaterialCommunityIcons } from '@expo/vector-icons';
-import Images from "../constants/Images";
-
+import { StyleSheet, Text, View, Dimensions,PermissionsAndroid,Image } from 'react-native';
+import { Button,Surface,Badge,Avatar} from 'react-native-paper';
+import { AntDesign,FontAwesome5,FontAwesome,Entypo,MaterialIcons } from '@expo/vector-icons';
 import EventService  from '../MyApi/Events';
+import Modal from 'react-native-modal';
 
+const { width } = Dimensions.get("screen");
 
 const origin = {latitude: 37.3318456, longitude: -122.0296002};
 const destination = {latitude: 37.771707, longitude: -122.4053769};
 
-export default function App({navigation,route}) {
+export default function Map({navigation,route}) {
 
-  
+
     const { covoiturageInfo } = route.params;
-
-    console.log(covoiturageInfo);
-
+  
     const [depart , setDepart] = useState(true);
     const [btnDisabled,setBtnDisabled] = useState(true);
     const [btnColor,setBtnColor] = useState("#2F4B97");
@@ -45,9 +43,13 @@ export default function App({navigation,route}) {
 
       }
 
-       EventService.AddEvent(event).then(()=>console.log('skrjiya'))
-      //console.log("state::::::",state)
-    
+       
+      EventService.AddEvent(event).then(()=>console.log('skrjiya'));
+      setModalVisible(true);
+      setTimeout(function(){ 
+        setModalVisible(false);
+        navigation.replace('My travels') 
+      }, 2000);
     }
 
     const [state,setState] = useState({
@@ -69,9 +71,23 @@ export default function App({navigation,route}) {
       //   });
       // }}
    
+      const [modalVisible,setModalVisible] = useState(false)
   return (
+    
     <View style={styles.container}>
- 
+      
+ <Modal style={{alignItems:"center"}} isVisible={modalVisible}>
+      <View style={styles.modal}>
+        <View>
+          <Badge style={styles.badge} size={80}>
+            <MaterialIcons name="done" size={50} color="white" />
+          </Badge>
+        </View>
+     
+          <Text style={{...styles.text,fontSize:18}} >Your Travel is added Successfully ! </Text>
+
+      </View>
+      </Modal>
       <MapView region={state.region} 
     //    rotateEnabled={false}
     //    showsUserLocation={true}
@@ -81,6 +97,7 @@ export default function App({navigation,route}) {
           if(depart)
            {
              setState({...state, departMarker: [{ latlng: e.nativeEvent.coordinate}] })
+            
              //console.log('depart',depart);
            }
             
@@ -99,7 +116,11 @@ export default function App({navigation,route}) {
     {
      state.departMarker.map((marker, i) => (
         <MapView.Marker key={i} coordinate={marker.latlng} >
-          <Image source={require('../assets/carDep.png')} style={{height: 35, width:35 }} />
+          
+          <View style={{alignItems:"center",justifyContent:"center"}}>
+            <Image source={require('../assets/car_arrow_right.png')} style={{height: 35, width:35 }} />
+            <Text style={styles.text}>Depart</Text>
+          </View>
         </MapView.Marker>  
     ))    
     }
@@ -107,7 +128,10 @@ export default function App({navigation,route}) {
     {
      state.arriveMarker.map((marker, i) => (
         <MapView.Marker key={i} coordinate={marker.latlng} >
-          <Image source={require('../assets/carArr.png')} style={{height: 34, width:34 }}/>
+            <View style={{alignItems:"center",justifyContent:"center"}}>
+            <Image source={require('../assets/car_arrow_left.png')} style={{height: 35, width:35 }}/>
+            <Text style={{...styles.text,color:"#9B50DE"}}>Arrivé</Text>
+          </View>
         </MapView.Marker>  
     ))    
     }
@@ -137,6 +161,7 @@ export default function App({navigation,route}) {
             <Text>{depart ? "Confimrer le depart": "Confirmer l'arrivé" }</Text>
   </Button>
   </Surface>
+  
     </View>
   );
 }
@@ -175,4 +200,25 @@ const styles = StyleSheet.create({
     bottom:0,
     backgroundColor: 'transparent'
   },
+  text:{
+    color:"#7B8ADE",
+    fontSize:16,
+    fontWeight:"bold",
+    textAlign:"center"
+  },
+  modal: {
+    padding:10,
+    height: 180,
+    width: 300,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius:20,
+    
+    backgroundColor:"white"
+  },
+  badge:{
+    alignItems:"center",
+    justifyContent:"center",
+    marginBottom:10
+  }
 });
