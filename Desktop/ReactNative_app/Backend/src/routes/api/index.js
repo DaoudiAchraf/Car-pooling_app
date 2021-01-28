@@ -19,8 +19,8 @@ router.delete('/deleteEvent/:id', eventsController.deleteEvent)
 
 router.post('/subscribeToEvent', eventsController.subscribeToEvent)
 
-
 router.post('/unSubscribeToEvent', eventsController.unSubscribeToEvent)
+router.put('/updateEvent', eventsController.updateEvent)
 
 
 // router.post("/events")

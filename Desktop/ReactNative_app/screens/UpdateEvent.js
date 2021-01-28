@@ -1,4 +1,4 @@
-import React,{useState,useContext} from "react";
+import React,{useState,useContext, useEffect} from "react";
 import { ScrollView, StyleSheet, Dimensions,View,Platform, ImageBackground} from "react-native";
 // Galio components
 import { Block, Text, theme } from "galio-framework";
@@ -34,11 +34,24 @@ const { width, height } = Dimensions.get('screen')
     const { user } =useContext(AuthContext)
 
 
-    const [phone, setPhone] = useState(route.params.item.phone.toString())
-    const [depart, setDepart] = useState(route.params.item.depart.name.toString())
-    const [arrive, setarrive] = useState(route.params.item.arrive.name)
-    const [prix, setPrix] = useState(route.params.item.prix.toString())
-    const [places, setPlaces] = useState(route.params.item.places-1)
+    console.log(route.params.item);
+
+
+    const [phone, setPhone] = useState("")
+    const [depart, setDepart] = useState("")
+    const [arrive, setarrive] = useState("")
+    const [prix, setPrix] = useState("")
+    const [places, setPlaces] = useState()
+
+
+
+    useEffect(() => {
+        setPhone(route.params.item.phone.toString());
+        setDepart(route.params.item.depart.name.toString());
+        setarrive(route.params.item.arrive.name.toString());
+        setPrix(route.params.item.prix.toString());
+        setPlaces(route.params.item.places-1);
+    })
 
 
 
@@ -55,7 +68,7 @@ const { width, height } = Dimensions.get('screen')
         date,
         user: user.userId
       }
-      navigation.navigate("Map",{covoiturageInfo:formData });
+      navigation.navigate("Map",{screen:"Map",params:{covoiturageInfo:formData,update:true,id:route.params.item._id} });
     }
 
      const [date, setDate] = useState(new Date());
@@ -109,10 +122,11 @@ const { width, height } = Dimensions.get('screen')
            </View>
      
         <Formik
-      initialValues={{ phone:'',depart:'',arrive: '',prix:''}}
-      onSubmit={Submit}
+        enableReinitialize={true}
+        initialValues={{ phone:phone,depart:depart,arrive:arrive,prix:prix}}
+        onSubmit={Submit}
     >
-       {({ handleChange,handleSubmit}) => (
+       {({ handleChange,handleSubmit,values}) => (
       <>
       <View style={{padding:30}}>
          <TextInput
@@ -124,7 +138,8 @@ const { width, height } = Dimensions.get('screen')
             onChangeText={handleChange('phone')}
             keyboardType="numeric"
             style={{height:47}}
-            value={phone}
+            value={values.phone}
+
            />
 
          <TextInput
@@ -134,7 +149,7 @@ const { width, height } = Dimensions.get('screen')
           theme={{ colors: { underlineColor: '#FFFFFF', background: 'white'  } }}
           label="Depart"  onChangeText={handleChange('depart')}
           style={styles.inputStyle}
-          value={depart}
+          value={values.depart}
           />
 
          <TextInput 
@@ -144,7 +159,7 @@ const { width, height } = Dimensions.get('screen')
          theme={{ colors: {  background: 'white'  } }}
           label="Arrivée" onChangeText={handleChange('arrive')}
           style={{height:47}}
-          value={arrive}
+          value={values.arrive}
           />
 
         <TextInput 
@@ -155,11 +170,10 @@ const { width, height } = Dimensions.get('screen')
           label="Prix DT" onChangeText={handleChange('prix')}
           style={{height:47,marginTop:10}}
           keyboardType="number-pad"
-          value={prix}
+          value={values.prix}
           />
-
+          
          <View style={styles.nbPlaceContainer}>
-
          <Chip style={{marginTop:10,width:'100%'}} >
            <View style={{flexDirection:"row",alignItems:"center"}}>
               <Text style={{fontSize:15,paddingRight:47}}>

@@ -85,9 +85,6 @@ import Swipeable from 'react-native-gesture-handler/Swipeable';
     }
 
     
-
-
-
     const btn_sub = <Button style={styles.Button} onPress={handleSubscribe}>
                       <Text style={styles.subscribe}>Subscribe</Text>
                     </Button>;

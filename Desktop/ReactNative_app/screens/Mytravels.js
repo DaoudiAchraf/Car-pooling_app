@@ -3,9 +3,16 @@ import { StyleSheet, Dimensions, ScrollView, ImageBackground } from 'react-nativ
 import { Block, theme } from 'galio-framework';
 import { Card } from '../components';
 import  EventService  from "../MyApi/Events";
+import AuthContext from "../Context/Context";
+import { ProgressBar, Colors } from 'react-native-paper';
+
+
+
+
 const { width,height } = Dimensions.get('screen');
 
-import AuthContext from "../Context/Context";
+
+
 
   Mytravels = ({navigation})=> 
   {
@@ -25,7 +32,7 @@ import AuthContext from "../Context/Context";
 
     },[])
 
-
+    
 
     renderArticles = () => {
 
@@ -46,6 +53,8 @@ import AuthContext from "../Context/Context";
     }
 
     return (
+      <>
+      <ProgressBar progress={0.5} indeterminate={true} visible={!events.length} color={Colors.red800} />
       <ImageBackground
       source={require("../assets/splash.png")}
       style={{ width, height, zIndex: 1 }}
@@ -54,6 +63,7 @@ import AuthContext from "../Context/Context";
         {renderArticles()}
       </Block>
       </ImageBackground>
+    </>
     );
   }
 

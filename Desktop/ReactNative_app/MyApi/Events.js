@@ -33,6 +33,13 @@ const unSubscribeToEvent = (id,idEvent) => {
     return client.post("/unSubscribeToEvent",{id,idEvent});
 }
 
+
+const updateEvent = (event) => {
+    return client.put("/updateEvent",{event});
+}
+
+
+
 export default
 {
     AddEvent,
@@ -41,4 +48,5 @@ export default
     deleteEvent,
     subscribeToEvent,
     unSubscribeToEvent,
+    updateEvent
 }

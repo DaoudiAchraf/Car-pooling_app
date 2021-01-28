@@ -322,51 +322,6 @@ export function LoginStack(props) {
 }
 
 
-function AppStack2(props) {  
-  return (
- 
-    <Drawer.Navigator
-      style={{ flex: 1 }}
-      drawerContent={props => <CustomDrawerContent {...props} />}
-      drawerStyle={{
-        backgroundColor: "white",
-        width: width * 0.8,
-
-      }}
-      drawerContentOptions={{
-        activeTintcolor: "white",
-        inactiveTintColor: "#000",
-        activeBackgroundColor: "transparent",
-        itemStyle: {
-          width: width * 0.75,
-          backgroundColor: "transparent",
-          paddingVertical: 16,
-          paddingHorizonal: 12,
-          justifyContent: "center",
-          alignContent: "center",
-          alignItems: "center",
-          overflow: "hidden"
-        },
-        labelStyle: {
-          fontSize: 18,
-          marginLeft: 12,
-          fontWeight: "normal"
-        }
-      }}
-      initialRouteName="My travels">
-      <Drawer.Screen name="Home" component={HomeStack} />
-      <Drawer.Screen name="Profile" component={ProfileStack} />
-      <Drawer.Screen name="Account" component={Register} />
-      <Drawer.Screen name="Elements" component={EventStack} />
-      <Drawer.Screen name="Articles" component={ArticlesStack} />
-      <Drawer.Screen name="My travels" component={MytravelsStack} />
-      <Drawer.Screen name="Map" component={MapStack} />
-      <Drawer.Screen name="Logout" component={Logout}  />
-    </Drawer.Navigator>
-  
-  )
-
-}
 
 function Logout(){
   authStorage.removeToken();

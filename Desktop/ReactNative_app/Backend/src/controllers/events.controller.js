@@ -56,3 +56,20 @@ exports.unSubscribeToEvent = (req, res) => {
   event.save();
   })
 }
+
+
+exports.updateEvent = (req, res) => {
+    
+  const evt = req.body.event
+
+  event.findById(evt.id).then(event=>{
+
+      event.phone=evt.phone;
+      event.prix=evt.prix;
+      event.places=evt.places;
+      event.date=evt.date;
+      event.depart=evt.depart;
+      event.arrive=evt.arrive;
+      event.save();
+  })
+}

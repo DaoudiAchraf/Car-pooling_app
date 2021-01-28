@@ -1,6 +1,7 @@
 import React,{useState,useEffect,useContext} from 'react';
 import { StyleSheet, Dimensions, ScrollView, ImageBackground } from 'react-native';
 import { Block, theme,Text, Button } from 'galio-framework';
+import { ProgressBar, Colors } from 'react-native-paper';
 
 import { Card } from '../components';
 import articles from '../constants/articles';
@@ -19,6 +20,7 @@ const { width,height } = Dimensions.get('screen');
   Home = ({navigation})=> 
   {
 
+
       const { user } =useContext(AuthContext);
       const [events, setEvents] = useState([]);
       const [initEvents, setInitEvents] = useState([]);
@@ -28,12 +30,13 @@ const { width,height } = Dimensions.get('screen');
 
 
       useEffect(() => {
+
+
         EventService.getEvent(user.userId).then(res=>{
           setEvents(res.data)     
           setInitEvents(res.data)     
         })
       },[])
-
 
       
    const renderFilter = () => 
@@ -93,6 +96,9 @@ const { width,height } = Dimensions.get('screen');
 
 
     return (
+      <>
+      <ProgressBar progress={0.5} indeterminate={true} visible={!events.length} color={Colors.red800} />
+
       <ImageBackground
       source={require("../assets/splash.png")}
       style={{ width, height, zIndex: 1 }}
@@ -103,7 +109,7 @@ const { width,height } = Dimensions.get('screen');
           {renderArticles()}
         </Block>
       </ImageBackground>
-    );
+   </>);
   }
 
 const styles = StyleSheet.create({

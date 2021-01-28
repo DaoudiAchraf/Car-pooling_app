@@ -15,6 +15,8 @@ export default function Map({navigation,route}) {
 
 
     const { covoiturageInfo } = route.params;
+    const { update } = route.params;
+    const { id } = route.params;
   
     const [depart , setDepart] = useState(true);
     const [btnDisabled,setBtnDisabled] = useState(true);
@@ -30,6 +32,7 @@ export default function Map({navigation,route}) {
 
     const addEvent = ()=>
     {
+
       const event = {
         ...covoiturageInfo,
         depart:{
@@ -40,16 +43,22 @@ export default function Map({navigation,route}) {
           name:covoiturageInfo.arrive,
           ...state.arriveMarker[0],
         },
-
+        id
       }
 
-       
+      if(update)
+
+        EventService.updateEvent(event).then(()=>alert("your event has been updated "));
+      
+      else{
       EventService.AddEvent(event).then(()=>console.log('skrjiya'));
       setModalVisible(true);
+    }
       setTimeout(function(){ 
         setModalVisible(false);
         navigation.replace('My travels') 
       }, 2000);
+
     }
 
     const [state,setState] = useState({
@@ -155,7 +164,7 @@ export default function Map({navigation,route}) {
               addEvent()
 
           setLoading(true)
-         setTimeout(()=>onChange(), 3000)} }>
+         setTimeout(()=>onChange(), 1500)} }>
              
             <Entypo name="location-pin" size={20} color="#7B8ADE" />
             <Text>{depart ? "Confimrer le depart": "Confirmer l'arrivé" }</Text>

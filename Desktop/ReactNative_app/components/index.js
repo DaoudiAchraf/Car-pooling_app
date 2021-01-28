@@ -6,8 +6,10 @@ import Header from './Header';
 import Input from './Input';
 import Switch from './Switch';
 import Select from './Select';
+import AutoComplete from './AutoComplete';
 
 export {
+  AutoComplete,
   Button,
   Card,
   DrawerItem,
@@ -15,5 +17,5 @@ export {
   Input,
   Header,
   Switch, 
-  Select
+  Select,
 };

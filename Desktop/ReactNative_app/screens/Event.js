@@ -4,7 +4,7 @@ import { ScrollView, StyleSheet, Dimensions,View,Platform, ImageBackground} from
 import { Block, Text, theme } from "galio-framework";
 // Argon themed components
 import { argonTheme, tabs } from "../constants/";
-import { Button as Btn, Select, Icon, Input, Header, } from "../components/";
+import { Button as Btn, Select, Icon, Input, Header,AutoComplete } from "../components/";
 import { TextInput,Chip,Snackbar,Button } from 'react-native-paper';
 import { MaterialCommunityIcons,MaterialIcons,FontAwesome5,Octicons} from '@expo/vector-icons';
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -20,6 +20,8 @@ const { width, height } = Dimensions.get('window')
   const Elements = ({navigation}) => {
    
     const [visible, setVisible] = React.useState(true);
+
+    const [showAutoComplete, setShowAutoComplete] = useState(false);
 
     const onDismissSnackBar = () => setVisible(false);
 
@@ -67,18 +69,17 @@ const { width, height } = Dimensions.get('window')
            <ImageBackground
               style={{ height: height,width: width, position: 'absolute', resizeMode: 'cover' }} 
               source={require("../assets/splash.png")}/>
-               
-       
+
         <View style={{alignItems:"center",marginBottom:0}}>
           
              
         <FontAwesome5 name="car" size={90} color="white" />
              <Text
-                h5
+                h4
                 color={"white"}
               >
-              Organisez votre covoiturage
-            </Text>
+                Make your travel
+              </Text>
           
            </View>
      
@@ -136,12 +137,15 @@ const { width, height } = Dimensions.get('window')
           underlineColor="#FFFFFF"
           numberOfLines={50}
           theme={{ colors: { underlineColor: '#FFFFFF', background: 'white'  } }}
-          label="Depart"  onChangeText={handleChange('depart')}
+          label="Depart"  
+          onChangeText={handleChange('depart')}
           style={styles.inputStyle}
           error={departError}
           value={values.depart}
-
+          onFocus={()=>{setShowAutoComplete(true)}}  
+          onBlur={()=>{setShowAutoComplete(false)}}  
           />
+
 
          <TextInput 
          dense={true}
@@ -253,7 +257,7 @@ const { width, height } = Dimensions.get('window')
     </Formik>
             
 
-    <View >
+    <View>
          <Snackbar duration={7000} style={{position: 'absolute',bottom:0}}
           visible={false}
           onDismiss={onDismissSnackBar}
@@ -271,6 +275,14 @@ const { width, height } = Dimensions.get('window')
   };
 
 const styles = StyleSheet.create({
+
+  auto:{
+
+    position:"absolute"
+
+
+
+  },
   container:{
     paddingTop:"10%",
     // marginTop:30,
