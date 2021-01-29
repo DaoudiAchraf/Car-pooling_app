@@ -82,7 +82,7 @@ const { width,height } = Dimensions.get('screen');
    renderArticles = () => {
 
         for(let i=0;i<events.length;i++)
-          eventsG.push(<Card  subs={true} remove={false}  key={i} item={events[i]} events={events}  setEvents={setEvents} horizontal />)
+          eventsG.push(<Card  dial={true} subs={true} remove={false}  father="home"  key={i} item={events[i]} events={events} navigation={navigation} setEvents={setEvents} horizontal />)
       
       return (
       <ScrollView

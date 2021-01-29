@@ -87,8 +87,6 @@ const { width, height } = Dimensions.get('window')
       initialValues={{ phone:'',depart:'',arrive: '',prix:''}}
       onSubmit={({phone,depart,arrive,prix},{resetForm})=>{
 
-
-
       if(phone === '')
         setphoneError(true)
       if(depart === '')
@@ -110,7 +108,7 @@ const { width, height } = Dimensions.get('window')
         }
         
         resetForm({values:""})
-        navigation.navigate("Map",{screen:"Map",params:{covoiturageInfo:formData }});
+        navigation.navigate("Map",{screen:"Map",params:{covoiturageInfo:formData,operation:"edit" }});
       }
 
       }}

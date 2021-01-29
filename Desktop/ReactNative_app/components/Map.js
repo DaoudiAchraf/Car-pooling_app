@@ -1,4 +1,4 @@
-import React ,{useState}from 'react';
+import React ,{useState,useEffect}from 'react';
 import MapView,{Polygon, Polyline} from 'react-native-maps';
 import { StyleSheet, Text, View, Dimensions,PermissionsAndroid,Image } from 'react-native';
 import { Button,Surface,Badge,Avatar} from 'react-native-paper';
@@ -17,7 +17,8 @@ export default function Map({navigation,route}) {
     const { covoiturageInfo } = route.params;
     const { update } = route.params;
     const { id } = route.params;
-  
+    const { item } = route.params;
+    const{operation}=route.params;
     const [depart , setDepart] = useState(true);
     const [btnDisabled,setBtnDisabled] = useState(true);
     const [btnColor,setBtnColor] = useState("#2F4B97");
@@ -29,6 +30,7 @@ export default function Map({navigation,route}) {
         setDepart(false);
         setBtnDisabled(true);   
     }
+
 
     const addEvent = ()=>
     {
@@ -47,9 +49,7 @@ export default function Map({navigation,route}) {
       }
 
       if(update)
-
         EventService.updateEvent(event).then(()=>alert("your event has been updated "));
-      
       else{
       EventService.AddEvent(event).then(()=>console.log('skrjiya'));
       setModalVisible(true);
@@ -72,6 +72,13 @@ export default function Map({navigation,route}) {
         arriveMarker: []
       });
 
+
+    if(item)
+      useEffect(() => {
+        setState({...state,departMarker: [{ latlng:item.depart.latlng}],arriveMarker: [{ latlng:item.arrive.latlng}]})
+      },[item]);
+
+
       // onMapReady={() => {
       //   PermissionsAndroid.request(
       //     PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION
@@ -79,6 +86,9 @@ export default function Map({navigation,route}) {
       //     alert(granted) // just to ensure that permissions were granted
       //   });
       // }}
+
+
+
    
       const [modalVisible,setModalVisible] = useState(false)
   return (
@@ -103,14 +113,13 @@ export default function Map({navigation,route}) {
     //    showsMyLocationButton={true}
       style={styles.map}
       onPress={(e) => {
-          if(depart)
+          if(depart && operation==="edit")
            {
              setState({...state, departMarker: [{ latlng: e.nativeEvent.coordinate}] })
-            
              //console.log('depart',depart);
            }
             
-          else
+          else if(operation==="edit")
           {
             setState({...state, arriveMarker: [{ latlng: e.nativeEvent.coordinate}] })
             //console.log('depart',depart);
@@ -146,6 +155,9 @@ export default function Map({navigation,route}) {
     }
 
     </MapView>
+
+
+    {operation==="edit"?
     <Surface style={styles.surface}>
     <Surface style={styles.carDirection}> 
 
@@ -160,16 +172,17 @@ export default function Map({navigation,route}) {
   
     <Button disabled={btnDisabled} mode="contained" color={btnColor} loading={loading} onPress={() =>
         {
-          if(!depart)
+          if(!depart  )
               addEvent()
 
           setLoading(true)
-         setTimeout(()=>onChange(), 1500)} }>
+         setTimeout(()=>onChange(), 1500)
+        }}>
              
             <Entypo name="location-pin" size={20} color="#7B8ADE" />
             <Text>{depart ? "Confimrer le depart": "Confirmer l'arrivé" }</Text>
   </Button>
-  </Surface>
+  </Surface>:null}
   
     </View>
   );
@@ -183,8 +196,8 @@ const styles = StyleSheet.create({
   
   },
   map: {
-    width: Dimensions.get('window').width,
-    height: Dimensions.get('window').height,
+    width: Dimensions.get('screen').width,
+    height: Dimensions.get('screen').height,
   
   },
   carDirection:

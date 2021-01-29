@@ -8,7 +8,7 @@ import { argonTheme } from '../constants';
 import convert from "../constants/date";
 import { event, set } from 'react-native-reanimated';
 import { MaterialIcons } from '@expo/vector-icons'; 
-
+import {Linking} from 'react-native'
 import  EventService  from "../MyApi/Events";
 import AuthContext from "../Context/Context";
 
@@ -17,7 +17,7 @@ import Swipeable from 'react-native-gesture-handler/Swipeable';
 
  Card=(props)=>{
 
-    const { navigation, item, horizontal, full, style, ctaColor, subs,remove,update , events, setEvents,imageStyle } = props;
+    const { navigation,father, item, horizontal, full, style, ctaColor,dial, subs,remove,update , events, setEvents,imageStyle } = props;
     
 
     const { user } = useContext(AuthContext)
@@ -84,7 +84,14 @@ import Swipeable from 'react-native-gesture-handler/Swipeable';
       EventService.deleteEvent(item._id)  
     }
 
-    
+
+    function handleDial() {
+      if(item.phone)
+        Linking.openURL(`tel:${item.phone}`)
+
+    }
+
+
     const btn_sub = <Button style={styles.Button} onPress={handleSubscribe}>
                       <Text style={styles.subscribe}>Subscribe</Text>
                     </Button>;
@@ -97,8 +104,7 @@ import Swipeable from 'react-native-gesture-handler/Swipeable';
 
 
     
-    const btn_update=<Button color="Success" style={styles.Button,styles.Button_update} onPress={()=>navigation.navigate('UpdateEvent',{screen:"Update",
-                                                                                                                                        params:{item}})} >
+    const btn_update=<Button color="Success" style={styles.Button,styles.Button_update} onPress={()=>navigation.navigate('UpdateEvent',{screen:"Update",params:{item}})} >
                             <Block flex={1} row={true} center={true}>
                                   <MaterialIcons name="update" size={25}   color="white" />
                                     <Text style={styles.subscribe}>
@@ -108,28 +114,42 @@ import Swipeable from 'react-native-gesture-handler/Swipeable';
                       </Button>;
 
 
-                      const btn_delete=<Button color="Error" style={styles.Button}
-                             onPress={confirmDelete}>
 
-                            <Block flex={1} row={true} center={true}>
-                                  <MaterialIcons name="delete" size={25}   color="white" />
-                                    <Text style={styles.subscribe}>
-                                      Delete
-                                    </Text>
-                            </Block>
-                          </Button>;
+    const del_right=<TouchableWithoutFeedback onPress={confirmDelete} >                                  
+                  <View style={{position:'relative',top:16,left:5,width:60,height:150,backgroundColor:argonTheme.COLORS.ERROR,alignItems:'center',justifyContent:'center',borderTopRightRadius:50,borderBottomRightRadius:50}} >
+                      <MaterialIcons name="delete" size={50}   color="white"   />
+                  </View>
+              </TouchableWithoutFeedback>;
+
+    const dial_right=<TouchableWithoutFeedback onPress={handleDial} >                                  
+                  <View style={{position:'relative',top:16,left:5,width:60,height:150,backgroundColor:argonTheme.COLORS.PRIMARY,alignItems:'center',justifyContent:'center',borderTopRightRadius:50,borderBottomRightRadius:50}} >
+                       <MaterialIcons name="phone" size={50}   color="white"   />
+                  </View>
+              </TouchableWithoutFeedback>;          
+
+    // const btn_delete=<Button color="Error" style={styles.Button}
+    //         onPress={confirmDelete}>
+
+    //       <Block flex={1} row={true} center={true}>
+    //             <MaterialIcons name="delete" size={25}   color="white" />
+    //               <Text style={styles.subscribe}>
+    //                 Delete
+    //               </Text>
+    //       </Block>
+    //     </Button>;
+
+
 
 
     return (
-      <Swipeable enabled={remove} renderRightActions={()=><TouchableWithoutFeedback onPress={confirmDelete} >                                  
-                                                                <View style={
-           {position:'relative',top:16,left:5,width:60,height:150,backgroundColor:argonTheme.COLORS.ERROR,alignItems:'center',justifyContent:'center',borderTopRightRadius:50,borderBottomRightRadius:50}} >
-                                                                <MaterialIcons name="delete" size={50}   color="white"   />
-                                                                </View>
-                                                         </TouchableWithoutFeedback>}>
+      <Swipeable enabled={true} renderRightActions={()=>dial?dial_right:del_right }>
+    
+
       <Block row={horizontal} card flex style={cardContainer}>
         
-        <TouchableWithoutFeedback >
+
+        <TouchableWithoutFeedback onPress={()=> father==="home"? navigation.navigate('Map',{screen:"Map",params:{item,operation:"view"}}):null}>
+
           <Block flex space="between" style={styles.cardDescription}>
             <Text style={styles.cardTitle}>
               From: <Text style={styles.values}>{item.depart.name}</Text>

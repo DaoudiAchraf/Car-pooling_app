@@ -33,8 +33,7 @@ const { width, height } = Dimensions.get('screen')
 
     const { user } =useContext(AuthContext)
 
-
-    console.log(route.params.item);
+    const { item } = route.params;
 
 
     const [phone, setPhone] = useState("")
@@ -46,12 +45,12 @@ const { width, height } = Dimensions.get('screen')
 
 
     useEffect(() => {
-        setPhone(route.params.item.phone.toString());
-        setDepart(route.params.item.depart.name.toString());
-        setarrive(route.params.item.arrive.name.toString());
-        setPrix(route.params.item.prix.toString());
-        setPlaces(route.params.item.places-1);
-    })
+        setPhone(item.phone.toString());
+        setDepart(item.depart.name.toString());
+        setarrive(item.arrive.name.toString());
+        setPrix(item.prix.toString());
+        setPlaces(item.places-1);
+    },[item])
 
 
 
@@ -68,7 +67,7 @@ const { width, height } = Dimensions.get('screen')
         date,
         user: user.userId
       }
-      navigation.navigate("Map",{screen:"Map",params:{covoiturageInfo:formData,update:true,id:route.params.item._id} });
+      navigation.navigate("Map",{screen:"Map",params:{item,covoiturageInfo:formData,update:true,id:route.params.item._id,operation:"edit"} });
     }
 
      const [date, setDate] = useState(new Date());
