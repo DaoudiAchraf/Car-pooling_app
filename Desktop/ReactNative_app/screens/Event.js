@@ -122,7 +122,7 @@ const { width, height } = Dimensions.get('window')
             underlineColor="#FFFFFF"
             numberOfLines={50}
             theme={{ colors: { color:"white",background: 'white'  } }}
-            label="Numero de Telephone" 
+            label="Phone number" 
             onChangeText={handleChange('phone')}
             keyboardType="numeric"
             style={{height:47}}
@@ -135,7 +135,7 @@ const { width, height } = Dimensions.get('window')
           underlineColor="#FFFFFF"
           numberOfLines={50}
           theme={{ colors: { underlineColor: '#FFFFFF', background: 'white'  } }}
-          label="Depart"  
+          label="From"  
           onChangeText={handleChange('depart')}
           style={styles.inputStyle}
           error={departError}
@@ -150,7 +150,7 @@ const { width, height } = Dimensions.get('window')
          underlineColor="#FFFFFF"
          numberOfLines={50}
          theme={{ colors: {  background: 'white'  } }}
-          label="Arrivée" onChangeText={handleChange('arrive')}
+          label="To" onChangeText={handleChange('arrive')}
           style={{height:47}}
           error={arriveError}
           value={values.arrive}
@@ -162,7 +162,7 @@ const { width, height } = Dimensions.get('window')
          underlineColor="#FFFFFF"
          numberOfLines={50}
          theme={{ colors: {  background: 'white'  } }}
-         label="Prix DT" onChangeText={handleChange('prix')}
+         label="Price DT" onChangeText={handleChange('prix')}
          style={{height:47,marginTop:10}}
          keyboardType="number-pad"
          error={prixError}
@@ -173,7 +173,7 @@ const { width, height } = Dimensions.get('window')
          <Chip style={{marginTop:10,width:'100%'}} >
            <View style={{flexDirection:"row",alignItems:"center"}}>
               <Text style={{fontSize:15,paddingRight:47}}>
-                nombre de place :
+                Number of places :
               </Text>
 
             <View style={styles.nbPlace} >
@@ -195,7 +195,7 @@ const { width, height } = Dimensions.get('window')
           <Chip  onPress={showDatepicker}>
             <View style={styles.dateTimePuce}>
                 <Octicons name="calendar" size={24} color="black" style={{marginLeft:5,marginRight:10}} />
-                <Text>Date Depart</Text>
+                <Text>Depart Date</Text>
                           {/* <MaterialCommunityIcons name="car-brake-abs" size={24} color={AbsColor}
                             onPress={() =>{
                               if(AbsColor === "black")
@@ -214,7 +214,7 @@ const { width, height } = Dimensions.get('window')
           <Chip onPress={showTimepicker}>
             <View style={styles.dateTimePuce}>
                 <MaterialIcons name="av-timer" size={24} color="black"  />
-                  <Text>Temps Depart</Text>
+                  <Text>Depart time</Text>
             </View>    
           </Chip>
               
@@ -222,7 +222,7 @@ const { width, height } = Dimensions.get('window')
            
             <Button mode="contained" style={{width:'100%',marginTop:'12%'}}
             onPress={handleSubmit}>
-              Valider
+              Create travel
             </Button>
             
             

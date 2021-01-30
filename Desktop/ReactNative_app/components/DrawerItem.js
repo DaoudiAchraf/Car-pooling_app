@@ -2,6 +2,8 @@ import React from "react";
 import { StyleSheet, TouchableOpacity, Linking } from "react-native";
 import { Block, Text, theme } from "galio-framework";
 
+import { Ionicons } from '@expo/vector-icons'; 
+
 import Icon from "./Icon";
 import argonTheme from "../constants/Theme";
 import { AntDesign,FontAwesome5,FontAwesome,Entypo,MaterialCommunityIcons } from '@expo/vector-icons';
@@ -29,14 +31,9 @@ class DrawerItem extends React.Component {
             color={focused ? "white" : argonTheme.COLORS.ERROR}
           />
         );
-      case "Articles":
+      case "Make travel":
         return (
-          <Icon
-            name="spaceship"
-            family="ArgonExtra"
-            size={14}
-            color={focused ? "white" : argonTheme.COLORS.PRIMARY}
-          />
+         <Ionicons name="ios-add-circle-outline" size={27} color={argonTheme.COLORS.PRIMARY} />
         );
       case "Profile":
         return (
@@ -47,14 +44,9 @@ class DrawerItem extends React.Component {
             color={focused ? "white" : argonTheme.COLORS.WARNING}
           />
         );
-      case "Account":
+      case "My travels":
         return (
-          <Icon
-            name="calendar-date"
-            family="ArgonExtra"
-            size={14}
-            color={focused ? "white" : argonTheme.COLORS.INFO}
-          />
+          <Entypo name="list" size={24} color=  {argonTheme.COLORS.PRIMARY} />
         );
       case "Getting Started":
         return (<Icon

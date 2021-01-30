@@ -36,15 +36,15 @@ const Register =()=> {
   {
   
    if(name === '' && email === '' && password === '')
-      snackBarError("Remplir tout les champs");
+      snackBarError("Fill all fields");
    else if(name === '')
-      snackBarError("Entrer Votre nom");
+      snackBarError("Enter your name");
    
    else if(email === '')
-      snackBarError("Entrer Votre email");
+      snackBarError("Enter your email");
     
    else if(password === '')
-      snackBarError("Entrer Votre mot de passe");
+      snackBarError("Enter your passeword");
    else
    {
       setVisibleModal(true);

@@ -25,7 +25,7 @@ const Login =({navigation})=> {
 
   const [visible, setVisible] = React.useState(false);
 
-  const [ErrorMSG, setErrorMSG] = React.useState("Enter Votre email et mot de passe");
+  const [ErrorMSG, setErrorMSG] = React.useState("You must enter your credentials");
 
   const onToggleSnackBar = () => setVisible(!visible);
 
@@ -41,13 +41,13 @@ const Login =({navigation})=> {
         onToggleSnackBar(true);
     else if (email === '' )
     {
-      setErrorMSG("Entrer Votre email");
+      setErrorMSG("Enter your email");
       onToggleSnackBar(true);
       
     }
     else if( password === '')
     { 
-      setErrorMSG("Enter votre mot de passe");
+      setErrorMSG("Enter your password");
       onToggleSnackBar(true);
     }
     else
@@ -58,7 +58,7 @@ const Login =({navigation})=> {
         if(!res.data.token)
         {
               setVisibleModal(false);
-              setErrorMSG("Login information invalide");
+              setErrorMSG("Login information invalid");
               onToggleSnackBar(true);
         }
         else

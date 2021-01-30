@@ -197,7 +197,7 @@ function EventStack(props) {
         options={{
           header: ({ navigation, scene }) => (
             <Header
-              title="Event"
+              title="Make travel"
               search
               options
               navigation={navigation}
@@ -367,7 +367,7 @@ function AppStack(props) {
       <Drawer.Screen name="Home" component={HomeStack} />
       <Drawer.Screen name="Profile" component={ProfileStack} />
       <Drawer.Screen name="Account" component={Register} />
-      <Drawer.Screen name="Elements" component={EventStack} />
+      <Drawer.Screen name="Make travel" component={EventStack} />
       <Drawer.Screen name="Articles" component={ArticlesStack} />
       <Drawer.Screen name="My travels" component={MytravelsStack} />
       <Drawer.Screen name="Map" component={MapStack} />

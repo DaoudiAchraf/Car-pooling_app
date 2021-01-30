@@ -9,15 +9,16 @@ import { Block, Text, theme } from "galio-framework";
 
 import Images from "../constants/Images";
 import { DrawerItem as DrawerCustomItem } from '../components';
+import { argonTheme } from "../constants";
+import { FontAwesome5 } from '@expo/vector-icons'; 
+
+
 
 function CustomDrawerContent({ drawerPosition, navigation, profile, focused, state, ...rest }) {
   const insets = useSafeArea();
   const screens = [
     "Home", 
-    "Profile",
-    "Account",
-    "Elements",
-    "Articles",
+    "Make travel",
     "My travels",
   ];
   return (
@@ -26,7 +27,9 @@ function CustomDrawerContent({ drawerPosition, navigation, profile, focused, sta
       forceInset={{ top: 'always', horizontal: 'never' }}
     >
       <Block flex={0.06} style={styles.header}>
-        <Image styles={styles.logo} source={Images.Logo} />
+        {/* <Image styles={styles.logo} source={Images.Logo} /> */}
+
+        <Text style={{fontSize:27,color:argonTheme.COLORS.PRIMARY}}><FontAwesome5 name="car" size={24} color={argonTheme.COLORS.PRIMARY} /> Covoiturage</Text>
       </Block>
       <Block flex style={{ paddingLeft: 8, paddingRight: 14 }}>
         <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
